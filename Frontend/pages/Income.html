@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Income</title>
+
+<link rel="stylesheet" href="../Css/Income.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="top">
+    <i class="fa-solid fa-arrow-left"></i>
+    <h2>Add Income</h2>
+</div>
+
+<div class="amount-Display">
+    <input type="number" id="amount" placeholder="">
+</div>
+<input type="text" id="title" placeholder="Title">
+
+<h4>Source Account</h4>
+
+<div class="accounts">
+
+<div class="card active" data-account="Cash">
+<i class="fa-solid fa-wallet"></i>
+<h3>Cash</h3>
+<p>Wallet</p>
+</div>
+
+<div class="card" data-account="Bank">
+<i class="fa-solid fa-building-columns"></i>
+<h3>Bank Account</h3>
+<p>****1234</p>
+</div>
+
+</div>
+
+<h4>Income Category</h4>
+
+<div class="category">
+
+<div class="icon green" data-category="Salary">
+<i class="fa-solid fa-briefcase"></i>
+<span>Salary</span>
+</div>
+
+<div class="icon blue" data-category="Freelance">
+<i class="fa-solid fa-laptop"></i>
+<span>Freelance</span>
+</div>
+
+<div class="icon sky" data-category="Investment">
+<i class="fa-solid fa-chart-line"></i>
+<span>Investment</span>
+</div>
+
+<div class="icon purple" data-category="Gift">
+<i class="fa-solid fa-gift"></i>
+<span>Gift</span>
+</div>
+
+<div class="icon orange" data-category="Bonus">
+<i class="fa-solid fa-coins"></i>
+<span>Bonus</span>
+</div>
+
+</div>
+
+<h4>Date</h4>
+
+<input type="date" id="date">
+
+<h4>Note</h4>
+
+<textarea id="note" placeholder="Write note"></textarea>
+
+<button id="saveIncome">Save Transaction</button>
+
+</div>
+
+
+
+</body>
+
+<script>
+
+$(document).ready(function(){
+
+    let selectedAccount = "Cash";
+    let selectedCategory = "";
+
+    // Back Button
+    $(".fa-arrow-left").click(function(){
+        history.back();
+    });
+
+    // Amount Live Update
+    $("#amount").on("input",function(){
+
+        let value=$(this).val();
+
+        if(value==""){
+            $("#amount-Display").text("₹0");
+        }
+        else{
+            $("#amount-Display").text("₹"+value);
+        }
+
+    });
+
+    // Select Account
+   $(document).on("click",".card",function(){
+
+    $(".card").removeClass("active");
+
+    $(this).addClass("active");
+
+    selectedAccount=$(this).data("account");
+
+});
+
+    // Select Category
+    $(".icon").click(function(){
+
+        $(".icon").removeClass("selected");
+
+        $(this).addClass("selected");
+
+        selectedCategory=$(this).data("category");
+
+    });
+
+    // Save Income
+    $("#saveIncome").click(function(){
+
+        let amount=$("#amount").val();
+        let title=$("#title").val();
+        let date=$("#date").val();
+        let note=$("#note").val();
+
+        if(amount==""){
+            alert("Enter Amount");
+            return;
+        }
+
+        if(title==""){
+            alert("Enter Title");
+            return;
+        }
+
+        if(selectedCategory==""){
+            alert("Select Income Category");
+            return;
+        }
+
+        if(date==""){
+            alert("Select Date");
+            return;
+        }
+
+        let income={
+
+            amount:amount,
+            title:title,
+            account:selectedAccount,
+            category:selectedCategory,
+            date:date,
+            note:note
+
+        };
+
+        console.log(income);
+
+        $.ajax({
+
+            url:"https://expenses-tracker-ccfm.onrender.com/income",
+            method:"POST",
+            contentType:"application/json",
+            data:JSON.stringify(income),
+
+            success:function(){
+
+                alert("Income Added Successfully ✅");
+
+                location.href="Home.html";
+
+            },
+
+            error:function(){
+
+                alert("Failed to Add Income");
+
+            }
+
+        });
+
+    });
+
+   function loadAccounts(){
+
+    $.get("https://expenses-tracker-ccfm.onrender.com/accounts", function(accounts){
+
+        $(".accounts").html("");
+
+        accounts.forEach(function(account,index){
+
+            $(".accounts").append(`
+                <div class="card ${index==0 ? 'active' : ''}"
+                     data-account="${account.accountName}">
+
+                    <i class="fa-solid ${
+                        account.type=="Bank"
+                        ? "fa-building-columns"
+                        : "fa-wallet"
+                    }"></i>
+
+                    <h3>${account.accountName}</h3>
+
+                    <p>₹${account.balance}</p>
+
+                </div>
+            `);
+
+        });
+
+        if(accounts.length>0){
+            selectedAccount=accounts[0].accountName;
+        }
+
+    });
+
+}
+
+loadAccounts();
+
+});
+
+</script>
+</html>

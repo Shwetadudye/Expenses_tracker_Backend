@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+     <link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../Css/SideBar.css">
+</head>
+<body>
+    <div id="btn">
+    <button id="add-btn">
+         <i class="bi bi-plus"></i>
+    </button>
+
+    <div id="menu">
+        <div class="item">
+            <i class="bi bi-wallet2" id="income-btn"></i>
+            <span>Income</span>
+        </div>
+        <div class="item" id="expense-btn">
+            <i class="bi bi-cash-stack"></i>
+            <span>Expenses</span>
+        </div>
+        <div class="item">
+          <i class="bi bi-arrow-left-right"></i>
+        <span>Transfer</span>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#add-btn").click(function () {
+    $("#menu").stop().slideToggle(200);
+});
+
+    $(function(){
+        $('#expense-btn').click(function(){
+            window.location.href = "Expenses.html";
+        })
+    })
+
+     $(function(){
+        $('#income-btn').click(function(){
+            window.location.href = "Income.html";
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Expense</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="../Css/Expenses.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+<i class="fa-solid fa-arrow-left"></i>
+<h2>Add Expense</h2>
+</div>
+
+<div class="amount-section">
+<label>Amount</label>
+<input type="number" id="amount" placeholder="1000">
+</div>
+
+<div class="input-box">
+<input type="text" id="title" placeholder="Title">
+</div>
+
+<h4>Select Account</h4>
+
+<div class="accounts">
+
+    <div class="card active" data-account="Cash">
+        <i class="fa-solid fa-wallet"></i>
+        <h3>Cash</h3>
+        <p>₹5000</p>
+    </div>
+
+    <div class="card" data-account="Bank">
+        <i class="fa-solid fa-building-columns"></i>
+        <h3>Bank Account</h3>
+        <p>₹75000</p>
+    </div>
+
+</div>
+
+<h4>Expense Category</h4>
+
+<div class="categories">
+
+<div class="category food" data-category="Food">
+<i class="fa-solid fa-utensils"></i>
+<span>Food</span>
+</div>
+
+<div class="category travel"data-category="Travel">
+<i class="fa-solid fa-plane"></i>
+<span>Travel</span>
+</div>
+
+<div class="category shopping" data-category="Shopping">
+<i class="fa-solid fa-bag-shopping"></i>
+<span>Shopping</span>
+</div>
+
+<div class="category health" data-category="Health">
+<i class="fa-solid fa-kit-medical"></i>
+<span>Health</span>
+</div>
+
+
+<div class="category bills" data-category="Bills">
+    <i class="fa-solid fa-file-invoice-dollar"></i>
+    <span>Bills</span>
+</div>
+
+</div>
+<div class="input-box">
+<input type="date" id="date">
+</div>
+
+<div class="input-box">
+<textarea id="note" placeholder="Note"></textarea>
+</div>
+
+<button class="saveBtn">
+Save Transaction
+</button>
+
+</div>
+
+</body>
+
+<script>
+    $(document).ready(function(){
+
+    let selectedAccount = "Cash";
+    let selectedCategory = "";
+
+    // Back Button
+    $(".fa-arrow-left").click(function(){
+        history.back();
+    });
+
+    // Account Select
+   $(document).ready(function () {
+
+    let selectedAccount = "Cash";
+
+    $(".card").click(function () {
+
+        $(".card").removeClass("active");
+
+        $(this).addClass("active");
+
+        selectedAccount = $(this).data("account");
+
+        console.log(selectedAccount);
+
+    });
+
+});
+
+    // Category Select
+   $(".category").click(function(){
+
+    $(".category").removeClass("selected");
+    $(this).addClass("selected");
+
+    selectedCategory = $(this).data("category");
+
+});
+
+    // Save Button
+    $(".saveBtn").click(function(){
+
+        let amount = $("#amount").val();
+        let title = $("#title").val();
+        let date = $("#date").val();
+        let note = $("#note").val();
+
+        if(amount==""){
+            alert("Enter Amount");
+            return;
+        }
+
+        if(title==""){
+            alert("Enter Title");
+            return;
+        }
+
+        if(selectedCategory==""){
+            alert("Select Category");
+            return;
+        }
+
+        if(date==""){
+            alert("Select Date");
+            return;
+        }
+
+        let expense = {
+
+            amount:amount,
+            title:title,
+            account:selectedAccount,
+            category:selectedCategory,
+            date:date,
+            note:note
+
+        };
+
+        console.log(expense);
+
+        alert("Expense Saved Successfully ✅");
+
+        // API Call yaha karna
+        $.ajax({
+            url:"https://expenses-tracker-ccfm.onrender.com/expenses",
+            method:"POST",
+            contentType:"application/json",
+            data:JSON.stringify(expense),
+            success:function(){
+                alert("Expense Added");
+            }
+        });
+        
+
+    });
+
+});
+</script>
+</html>

@@ -1,0 +1,235 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#111;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:30px;
+    flex-wrap:wrap;
+    padding:30px;
+    color:#fff;
+}
+
+/* Main Card */
+.container{
+    width:380px;
+    background:#181818;
+    padding:25px;
+    border-radius:25px;
+    box-shadow:0 0 15px rgba(0,0,0,.4);
+}
+
+/* Header */
+.top{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.top i{
+    font-size:22px;
+    cursor:pointer;
+}
+
+.top h2{
+    flex:1;
+    text-align:center;
+}
+
+/* Amount */
+.amount-Display{
+    margin-bottom:25px;
+}
+
+.amount-Display input{
+    width:100%;
+    background:none;
+    border:none;
+    outline:none;
+    text-align:center;
+    font-size:55px;
+    font-weight:bold;
+    color:#b6ff00;
+}
+
+/* Inputs */
+input,
+textarea{
+    width:100%;
+    padding:15px;
+    margin:12px 0;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:#252525;
+    color:#fff;
+    font-size:16px;
+}
+
+input[type="date"]{
+    color:#aaa;
+}
+
+textarea{
+    height:90px;
+    resize:none;
+}
+
+h4{
+    margin-top:20px;
+    margin-bottom:10px;
+}
+
+/* Accounts */
+.account{
+    display:flex;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    flex:1;
+    background:#232323;
+    padding:18px;
+    border-radius:15px;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:.3s;
+}
+
+.card.active{
+    border:2px solid #b6ff00;
+}
+
+.card:hover{
+    transform:scale(1.03);
+}
+
+.card i{
+    font-size:24px;
+    color:#ffd000;
+    margin-bottom:10px;
+}
+
+.card h3{
+    font-size:17px;
+    margin-bottom:5px;
+}
+
+.card p{
+    color:#999;
+    font-size:14px;
+}
+
+/* Categories */
+/* Income Categories */
+
+.category{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.icon{
+    text-align:center;
+    cursor:pointer;
+}
+
+.icon i{
+    width:55px;
+    height:55px;
+    line-height:55px;
+    border-radius:50%;
+    font-size:22px;
+    color:#fff;
+    transition:.3s;
+}
+
+.icon span{
+    display:block;
+    margin-top:8px;
+    font-size:13px;
+    color:#aaa;
+    transition:.3s;
+}
+
+/* Background Colors */
+
+.green i{
+    background:#18d26e;
+}
+
+.blue i{
+    background:#0099ff;
+}
+
+.sky i{
+    background:#2c6cff;
+}
+
+.purple i{
+    background:#b620ff;
+}
+
+.orange i{
+    background:#ff8a00;
+}
+
+/* Hover */
+
+.icon:hover i{
+    transform:scale(1.08);
+}
+
+/* Selected */
+
+.icon.selected i{
+    border:3px solid #b6ff00;
+    box-shadow:0 0 15px rgba(182,255,0,.8);
+    transform:scale(1.08);
+}
+
+.icon.selected span{
+    color:#b6ff00;
+    font-weight:bold;
+}
+/* Save Button */
+button{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:35px;
+    background:#b6ff00;
+    color:#111;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#d9ff00;
+    transform:translateY(-2px);
+}
+.chart-card{
+    width:380px;
+    background:#181818;
+    padding:20px;
+    border-radius:20px;
+    margin-left:30px;
+    height:350px;
+}
+
+.chart-card canvas{
+    width:100% !important;
+    height:280px !important;
+}

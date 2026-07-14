@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Account Management</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="../Css/Account.css">
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Account Management</h2>
+
+<div class="addForm">
+
+<input type="text" id="accountName" placeholder="Account Name">
+
+<select id="accountType">
+
+<option value="Cash">Cash</option>
+<option value="Bank">Bank</option>
+<option value="Wallet">Wallet</option>
+
+</select>
+
+<input type="number" id="balance" placeholder="Opening Balance">
+
+<button id="addAccount">
+Add Account
+</button>
+
+</div>
+
+<div id="accountList"></div>
+
+</div>
+
+<script>
+    const API="https://expenses-tracker-ccfm.onrender.com/accounts";
+
+loadAccounts();
+
+function loadAccounts(){
+
+$("#accountList").html("");
+
+$.get(API,function(data){
+
+data.forEach(function(item){
+
+$("#accountList").append(`
+
+<div class="account">
+
+<div class="left">
+
+<h3>${item.accountName}</h3>
+
+<p>${item.type}</p>
+
+<h4>₹${item.balance}</h4>
+
+</div>
+
+<div class="actions">
+
+<button class="edit" data-id="${item.id}">Edit</button>
+
+<button class="delete" data-id="${item.id}">Delete</button>
+
+</div>
+
+</div>
+
+`);
+
+});
+
+});
+
+}
+
+$("#addAccount").click(function(){
+
+let accountName=$("#accountName").val();
+
+let type=$("#accountType").val();
+
+let balance=$("#balance").val();
+
+if(accountName==""){
+
+alert("Enter Account Name");
+
+return;
+
+}
+
+if(balance==""){
+
+alert("Enter Balance");
+
+return;
+
+}
+
+let account={
+
+accountName,
+
+type,
+
+balance:Number(balance)
+
+};
+
+$.ajax({
+
+url:API,
+
+method:"POST",
+
+contentType:"application/json",
+
+data:JSON.stringify(account),
+
+success:function(){
+
+alert("Account Added");
+
+$("#accountName").val("");
+
+$("#balance").val("");
+
+loadAccounts();
+
+}
+
+});
+
+});
+
+$(document).on("click",".delete",function(){
+
+let id=$(this).data("id");
+
+if(confirm("Delete Account?")){
+
+$.ajax({
+
+url:API+"/"+id,
+
+method:"DELETE",
+
+success:function(){
+
+loadAccounts();
+
+}
+
+});
+
+}
+
+});
+
+$(document).on("click",".edit",function(){
+
+let id=$(this).data("id");
+
+let newBalance=prompt("Enter New Balance");
+
+if(newBalance==null) return;
+
+$.ajax({
+
+url:API+"/"+id,
+
+method:"PATCH",
+
+contentType:"application/json",
+
+data:JSON.stringify({
+
+balance:Number(newBalance)
+
+}),
+
+success:function(){
+
+loadAccounts();
+
+}
+
+});
+
+});
+</script>
+
+</body>
+</html>
