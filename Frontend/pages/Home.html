@@ -3,56 +3,940 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-     <link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../Css/SideBar.css">
-</head>
-<body>
-    <div id="btn">
-    <button id="add-btn">
-         <i class="bi bi-plus"></i>
-    </button>
+    <title>Expense Tracker Dashboard</title>
 
-    <div id="menu">
-        <div class="item">
-            <i class="bi bi-wallet2" id="income-btn"></i>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- jQuery -->
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+    </script>
+
+    <link rel="stylesheet" href="../Css/Home.css">
+
+</head>
+
+<body>
+
+<!-- ================= Sidebar ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        <img src="../Images/logo.png" alt="">
+        <h3>Expense Tracker</h3>
+    </div>
+
+    <ul>
+
+        <li id="dash">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Dashboard</span>
+        </li>
+
+        <li id="income">
+            <i class="bi bi-wallet2"></i>
             <span>Income</span>
-        </div>
-        <div class="item" id="expense-btn">
+        </li>
+
+        <li id="expense">
             <i class="bi bi-cash-stack"></i>
             <span>Expenses</span>
-        </div>
-        <div class="item">
-          <i class="bi bi-arrow-left-right"></i>
-        <span>Transfer</span>
-        </div>
-    </div>
+        </li>
+
+        <li id="profile">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile</span>
+        </li>
+
+        <li id="logout">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </li>
+
+    </ul>
+
 </div>
+
+<!-- ================= Main ================= -->
+
+<div class="main">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <h2>Dashboard</h2>
+
+            <p>Welcome Back 👋</p>
+
+        </div>
+
+        <div class="header-right">
+
+            <button class="notification">
+                <i class="bi bi-bell"></i>
+            </button>
+
+            <div class="profile-box">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>User</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Floating Button -->
+
+    <div id="btn">
+
+        <button id="add-btn">
+
+            <i class="bi bi-plus"></i>
+
+        </button>
+
+        <div id="menu">
+
+            <div class="item">
+                <i class="bi bi-arrow-left-right"></i>
+                <span>Transfer</span>
+            </div>
+
+            <div class="item" id="expense-btn">
+                <i class="bi bi-cash-stack"></i>
+                <span>Expenses</span>
+            </div>
+
+            <div class="item" id="income-btn">
+                <i class="bi bi-wallet2"></i>
+                <span>Income</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Dashboard Cards -->
+
+    <div class="summary-cards">
+
+        <div class="summary-card balance">
+
+            <h5>Total Balance</h5>
+
+            <h2 id="totalBalance">₹0</h2>
+
+        </div>
+
+        <div class="summary-card income">
+
+            <h5>Total Income</h5>
+
+            <h2 id="totalIncome">₹0</h2>
+
+        </div>
+
+        <div class="summary-card expense">
+
+            <h5>Total Expense</h5>
+
+            <h2 id="totalExpense">₹0</h2>
+
+        </div>
+
+        <div class="summary-card budget">
+
+            <h5>Monthly Budget</h5>
+            <h2 id="budgetAmount">₹0</h2>
+
+            <div class="progress">
+
+                <div id="budgetProgress"></div>
+
+            </div>
+
+            <p id="budgetPercent">0% Used</p>
+
+        </div>
+
+    </div>
+
+    <!-- Dashboard Grid Starts -->
+
+    <div class="dashboard-grid">
+
+            <!-- Left Side -->
+
+    <div class="left-panel">
+
+        <div class="chart-card">
+
+            <h4>Expense Categories</h4>
+
+            <canvas id="expensePieChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h4>Quick Stats</h4>
+
+            <div class="quick-item">
+                <span>Total Transactions</span>
+                <h5 id="totalTransactions">0</h5>
+            </div>
+
+            <div class="quick-item">
+                <span>Highest Expense</span>
+                <h5 id="highestExpense">₹0</h5>
+            </div>
+
+            <div class="quick-item">
+                <span>Highest Income</span>
+                <h5 id="highestIncome">₹0</h5>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Center -->
+
+    <div class="center-panel">
+
+        <div class="chart-card">
+
+            <h4>Income vs Expenses</h4>
+
+            <canvas id="financeChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h4>Monthly Expenses</h4>
+
+            <canvas id="expenseBarChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- Right -->
+
+    <div class="right-panel">
+
+        <div class="chart-card">
+
+            <h4>Reminders</h4>
+
+            <div class="reminder-item">
+                <div id="reminderList"></div>
+                <i class="bi bi-bell-fill"></i>
+
+                <div>
+
+                    <h6>Electricity Bill</h6>
+
+                    <small>25 July</small>
+
+                </div>
+
+            </div>
+
+            <div class="reminder-item">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <div>
+
+                    <h6>Netflix Subscription</h6>
+
+                    <small>27 July</small>
+
+                </div>
+
+            </div>
+
+            <div class="reminder-item">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <div>
+
+                    <h6>EMI Payment</h6>
+
+                    <small>30 July</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h4>Upcoming</h4>
+
+            <div class="upcoming-item">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <span>Salary Credit</span>
+
+            </div>
+
+            <div class="upcoming-item">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <span>Rent Payment</span>
+
+            </div>
+
+            <div class="upcoming-item">
+
+                <i class="bi bi-calendar-event"></i>
+
+                <span>Insurance Premium</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Recent Transactions -->
+
+<div class="recent-card">
+
+    <div class="table-header">
+
+        <h3>Recent Transactions</h3>
+
+    </div>
+
+    <table class="table table-hover align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>Amount</th>
+
+                <th>Title</th>
+
+                <th>Account</th>
+
+                <th>Category</th>
+
+                <th>Date</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="recentTransactions">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 <script>
+    $(document).ready(function () {
+
+    // ---------------- Navigation ----------------
+
+    $("#dash").click(() => window.location.href = "Home.html");
+    $("#income").click(() => window.location.href = "Income.html");
+    $("#expense").click(() => window.location.href = "Expenses.html");
+    $("#profile").click(() => window.location.href = "Profile.html");
+
+    $("#logout").click(function () {
+        localStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
+    });
+
     $("#add-btn").click(function () {
-    $("#menu").stop().slideToggle(200);
+        $("#menu").stop().slideToggle(200);
+        $("#add-btn i").toggleClass("bi-plus bi-x-lg");
+    });
+
+    $("#income-btn").click(() => window.location.href = "Income.html");
+    $("#expense-btn").click(() => window.location.href = "Expenses.html");
+
+
+
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+    }
+
+
+
+    $.when(
+
+        $.get("https://expenses-tracker-ccfm.onrender.com/income"),
+        $.get("https://expenses-tracker-ccfm.onrender.com/expenses")
+
+    ).done(function (incomeRes, expenseRes) {
+
+        let income = incomeRes[0].filter(i => i.userId == currentUser.id);
+        let expenses = expenseRes[0].filter(i => i.userId == currentUser.id);
+
+
+
+        // ---------------- Totals ----------------
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        income.forEach(item => totalIncome += Number(item.amount));
+        expenses.forEach(item => totalExpense += Number(item.amount));
+
+        $("#totalIncome").text("₹" + totalIncome);
+        $("#totalExpense").text("₹" + totalExpense);
+        $("#totalBalance").text("₹" + (totalIncome - totalExpense));
+
+
+
+        // ---------------- Budget ----------------
+
+        let budget = 25000;
+
+        let percent = (totalExpense / budget) * 100;
+
+        if (percent > 100) percent = 100;
+
+        $("#budgetProgress").css({
+            width: percent + "%",
+            background: "#6C63FF",
+            height: "100%"
+        });
+
+        $("#budgetPercent").text(percent.toFixed(1) + "% Used");
+
+
+
+        // ---------------- Monthly Data ----------------
+
+        let months = {
+            Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
+            Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
+        };
+
+        let expenseMonths = {
+            Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
+            Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
+        };
+
+
+
+        income.forEach(function(item){
+
+            let m = new Date(item.date).toLocaleString("default",{month:"short"});
+
+            months[m] += Number(item.amount);
+
+        });
+
+        expenses.forEach(function(item){
+
+            let m = new Date(item.date).toLocaleString("default",{month:"short"});
+
+            expenseMonths[m] += Number(item.amount);
+
+        });
+
+
+
+        // ---------------- Line Chart ----------------
+
+        new Chart(document.getElementById("financeChart"),{
+
+            type:"line",
+
+            data:{
+
+                labels:Object.keys(months),
+
+                datasets:[
+
+                    {
+
+                        label:"Income",
+
+                        data:Object.values(months),
+
+                        borderColor:"#22c55e",
+
+                        backgroundColor:"#22c55e",
+
+                        tension:.4
+
+                    },
+
+                    {
+
+                        label:"Expense",
+
+                        data:Object.values(expenseMonths),
+
+                        borderColor:"#ef4444",
+
+                        backgroundColor:"#ef4444",
+
+                        tension:.4
+
+                    }
+
+                ]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                plugins:{
+
+                    legend:{
+
+                        labels:{
+
+                            color:"white"
+
+                        }
+
+                    }
+
+                },
+
+                scales:{
+
+                    x:{
+
+                        ticks:{
+
+                            color:"white"
+
+                        }
+
+                    },
+
+                    y:{
+
+                        ticks:{
+
+                            color:"white"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+
+        // ---------------- Bar Chart ----------------
+
+        new Chart(document.getElementById("expenseBarChart"),{
+
+            type:"bar",
+
+            data:{
+
+                labels:Object.keys(expenseMonths),
+
+                datasets:[{
+
+                    label:"Expenses",
+
+                    data:Object.values(expenseMonths),
+
+                    backgroundColor:"#6C63FF"
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                plugins:{
+
+                    legend:{
+
+                        labels:{
+
+                            color:"white"
+
+                        }
+
+                    }
+
+                },
+
+                scales:{
+
+                    x:{
+
+                        ticks:{
+
+                            color:"white"
+
+                        }
+
+                    },
+
+                    y:{
+
+                        ticks:{
+
+                            color:"white"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+        // ---------------- Doughnut ----------------
+
+        let categoryData = {};
+
+        expenses.forEach(function(item){
+
+            let cat = item.category || "Other";
+
+            categoryData[cat] = (categoryData[cat] || 0) + Number(item.amount);
+
+        });
+
+        new Chart(document.getElementById("expensePieChart"),{
+
+            type:"doughnut",
+
+            data:{
+
+                labels:Object.keys(categoryData),
+
+                datasets:[{
+
+                    data:Object.values(categoryData)
+
+                }]
+
+            },
+
+            options:{
+
+                cutout:"70%",
+
+                plugins:{
+
+                    legend:{
+
+                        labels:{
+
+                            color:"white"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+
+        // ---------------- Quick Stats ----------------
+
+        $("#totalTransactions").text(income.length + expenses.length);
+
+        let highestExpense = 0;
+
+        expenses.forEach(item=>{
+
+            if(Number(item.amount)>highestExpense)
+
+                highestExpense=Number(item.amount);
+
+        });
+
+        $("#highestExpense").text("₹"+highestExpense);
+
+        let highestIncome = 0;
+
+        income.forEach(item=>{
+
+            if(Number(item.amount)>highestIncome)
+
+                highestIncome=Number(item.amount);
+
+        });
+
+        $("#highestIncome").text("₹"+highestIncome);
+
+
+
+    });
+
+
+
+    loadIncomeTransactions();
+
 });
 
-    $(function(){
-        $('#expense-btn').click(function(){
-            window.location.href = "Expenses.html";
-        })
-    })
+$.when(
 
-     $(function(){
-        $('#income-btn').click(function(){
-            window.location.href = "Income.html";
-        })
-    })
+$.get("https://expenses-tracker-ccfm.onrender.com/income"),
+
+$.get("https://expenses-tracker-ccfm.onrender.com/expenses"),
+
+$.get("https://expenses-tracker-ccfm.onrender.com/budget"),
+
+$.get("https://expenses-tracker-ccfm.onrender.com/reminders")
+
+).done(function(incomeRes,expenseRes,budgetRes,reminderRes){
+
+let budget = budgetRes[0].find(b=>b.userId==currentUser.id);
+
+let budgetAmount = budget ? Number(budget.amount) : 0;
+
+$("#budgetAmount").text("₹"+budgetAmount);
+
+let used=(totalExpense/budgetAmount)*100;
+
+if(used>100) used=100;
+
+$("#budgetProgress").css("width",used+"%");
+
+$("#budgetPercent").text(used.toFixed(1)+"% Used");
+});
+
+$("#reminderList").html("");
+
+reminderRes[0]
+
+.filter(r=>r.userId==currentUser.id && r.type=="Reminder")
+
+.forEach(function(item){
+
+$("#reminderList").append(`
+
+<div class="reminder-item">
+
+<i class="bi bi-bell-fill"></i>
+
+<div>
+
+<h6>${item.title}</h6>
+
+<small>${item.date}</small>
+
+</div>
+
+</div>
+
+`);
+
+});
+
+$("#upcomingList").html("");
+
+reminderRes[0]
+
+.filter(r=>r.userId==currentUser.id && r.type=="Upcoming")
+
+.forEach(function(item){
+
+$("#upcomingList").append(`
+
+<div class="upcoming-item">
+
+<i class="bi bi-calendar-event"></i>
+
+<span>${item.title}</span>
+
+</div>
+
+`);
+
+});
+
+
+function loadIncomeTransactions(){
+
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    $.get("https://expenses-tracker-ccfm.onrender.com/income",function(data){
+
+        $("#recentTransactions").html("");
+
+        data.filter(item=>item.userId==currentUser.id)
+
+        .forEach(function(item){
+
+            $("#recentTransactions").append(`
+
+                <tr>
+
+                    <td>₹${item.amount}</td>
+
+                    <td>${item.title}</td>
+
+                    <td>${item.account}</td>
+
+                    <td>${item.category}</td>
+
+                    <td>${item.date}</td>
+
+                    <td>
+
+                        <button class="editIncome btn btn-warning btn-sm" data-id="${item.id}">
+
+                            <i class="bi bi-pencil"></i>
+
+                        </button>
+
+                        <button class="deleteIncome btn btn-danger btn-sm" data-id="${item.id}">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `);
+
+        });
+
+    });
+
+}
+
+
+
+$(document).on("click",".deleteIncome",function(){
+
+    let id=$(this).data("id");
+
+    if(confirm("Delete this income?")){
+
+        $.ajax({
+
+            url:"https://expenses-tracker-ccfm.onrender.com/income/"+id,
+
+            method:"DELETE",
+
+            success:function(){
+
+                loadIncomeTransactions();
+
+                location.reload();
+
+            }
+
+        });
+
+    }
+
+});
+
+
+
+$(document).on("click",".editIncome",function(){
+
+    let id=$(this).data("id");
+
+    $.get("https://expenses-tracker-ccfm.onrender.com/income/"+id,function(item){
+
+        let title=prompt("Title",item.title);
+
+        let amount=prompt("Amount",item.amount);
+
+        if(title==null || amount==null) return;
+
+        $.ajax({
+
+            url:"https://expenses-tracker-ccfm.onrender.com/income/"+id,
+
+            method:"PATCH",
+
+            contentType:"application/json",
+
+            data:JSON.stringify({
+
+                title:title,
+
+                amount:amount
+
+            }),
+
+            success:function(){
+
+                loadIncomeTransactions();
+
+                location.reload();
+
+            }
+
+        });
+
+    });
+
+});
 </script>
 </html>

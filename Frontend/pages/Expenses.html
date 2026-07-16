@@ -138,14 +138,19 @@ Save Transaction
     $(".saveBtn").click(function(){
 
         let amount = $("#amount").val();
+
+        amount = Number(amount);
+
+if (isNaN(amount) || amount <= 0) {
+    alert("Amount must be greater than 0");
+    $("#amount").focus();
+    return;
+}
+
         let title = $("#title").val();
         let date = $("#date").val();
         let note = $("#note").val();
 
-        if(amount==""){
-            alert("Enter Amount");
-            return;
-        }
 
         if(title==""){
             alert("Enter Title");
@@ -162,16 +167,21 @@ Save Transaction
             return;
         }
 
-        let expense = {
+        const currentUser =
+JSON.parse(localStorage.getItem("loggedInUser"));
 
-            amount:amount,
-            title:title,
-            account:selectedAccount,
-            category:selectedCategory,
-            date:date,
-            note:note
+let expense={
 
-        };
+    userId:currentUser.id,
+
+    amount:amount,
+    title:title,
+    account:selectedAccount,
+    category:selectedCategory,
+    date:date,
+    note:note
+
+};
 
         console.log(expense);
 

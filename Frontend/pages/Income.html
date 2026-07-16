@@ -22,13 +22,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 
 <div class="amount-Display">
-    <input type="number" id="amount" placeholder="">
+    <input type="number" id="amount" placeholder="120000" min="120000">
 </div>
 <input type="text" id="title" placeholder="Title">
 
 <h4>Source Account</h4>
 
-<div class="accounts">
+<div class="account" >
 
 <div class="card active" data-account="Cash">
 <i class="fa-solid fa-wallet"></i>
@@ -118,15 +118,15 @@ $(document).ready(function(){
     });
 
     // Select Account
-   $(document).on("click",".card",function(){
+    $(".card").click(function(){
 
-    $(".card").removeClass("active");
+        $(".card").removeClass("active");
 
-    $(this).addClass("active");
+        $(this).addClass("active");
 
-    selectedAccount=$(this).data("account");
+        selectedAccount=$(this).data("account");
 
-});
+    });
 
     // Select Category
     $(".icon").click(function(){
@@ -147,10 +147,14 @@ $(document).ready(function(){
         let date=$("#date").val();
         let note=$("#note").val();
 
-        if(amount==""){
-            alert("Enter Amount");
-            return;
-        }
+
+        amount = Number(amount);
+
+if (isNaN(amount) || amount <= 120000) {
+    alert("Amount must be greater than 0");
+    $("#amount").focus();
+    return;
+}
 
         if(title==""){
             alert("Enter Title");
@@ -167,16 +171,21 @@ $(document).ready(function(){
             return;
         }
 
-        let income={
+        const currentUser =
+JSON.parse(localStorage.getItem("loggedInUser"));
 
-            amount:amount,
-            title:title,
-            account:selectedAccount,
-            category:selectedCategory,
-            date:date,
-            note:note
+let income={
 
-        };
+    userId:currentUser.id,
+
+    amount:amount,
+    title:title,
+    account:selectedAccount,
+    category:selectedCategory,
+    date:date,
+    note:note
+
+};
 
         console.log(income);
 
@@ -204,43 +213,6 @@ $(document).ready(function(){
         });
 
     });
-
-   function loadAccounts(){
-
-    $.get("https://expenses-tracker-ccfm.onrender.com/accounts", function(accounts){
-
-        $(".accounts").html("");
-
-        accounts.forEach(function(account,index){
-
-            $(".accounts").append(`
-                <div class="card ${index==0 ? 'active' : ''}"
-                     data-account="${account.accountName}">
-
-                    <i class="fa-solid ${
-                        account.type=="Bank"
-                        ? "fa-building-columns"
-                        : "fa-wallet"
-                    }"></i>
-
-                    <h3>${account.accountName}</h3>
-
-                    <p>₹${account.balance}</p>
-
-                </div>
-            `);
-
-        });
-
-        if(accounts.length>0){
-            selectedAccount=accounts[0].accountName;
-        }
-
-    });
-
-}
-
-loadAccounts();
 
 });
 

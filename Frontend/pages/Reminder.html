@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+
+    <h3>Add Reminder</h3>
+
+    <form id="reminderForm">
+
+        <div class="mb-3">
+            <label>Title</label>
+            <input type="text" id="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Date</label>
+            <input type="date" id="date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Type</label>
+
+            <select id="type" class="form-select">
+
+                <option value="Reminder">Reminder</option>
+                <option value="Upcoming">Upcoming</option>
+
+            </select>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Add Reminder
+        </button>
+
+    </form>
+
+</div>
+</body>
+<script>
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+$("#reminderForm").submit(function(e){
+
+    e.preventDefault();
+
+    let title = $("#title").val().trim();
+    let date = $("#date").val();
+    let type = $("#type").val();
+
+    $.ajax({
+
+        url:"https://expenses-tracker-ccfm.onrender.com/reminders",
+
+        method:"POST",
+
+        contentType:"application/json",
+
+        data:JSON.stringify({
+
+            userId: currentUser.id,
+
+            title: title,
+
+            date: date,
+
+            type: type
+
+        }),
+
+        success:function(){
+
+            alert("Reminder Added Successfully");
+
+            $("#reminderForm")[0].reset();
+
+        },
+
+        error:function(){
+
+            alert("Something went wrong");
+
+        }
+
+    });
+
+});
+</script>
+</html>

@@ -16,7 +16,7 @@ body{
     color:#fff;
 }
 
-/* Main Card */
+
 .container{
     width:380px;
     background:#181818;
@@ -25,7 +25,7 @@ body{
     box-shadow:0 0 15px rgba(0,0,0,.4);
 }
 
-/* Header */
+
 .top{
     display:flex;
     align-items:center;
@@ -43,7 +43,6 @@ body{
     text-align:center;
 }
 
-/* Amount */
 .amount-Display{
     margin-bottom:25px;
 }
@@ -59,7 +58,6 @@ body{
     color:#b6ff00;
 }
 
-/* Inputs */
 input,
 textarea{
     width:100%;
@@ -87,7 +85,6 @@ h4{
     margin-bottom:10px;
 }
 
-/* Accounts */
 .account{
     display:flex;
     gap:15px;
@@ -128,9 +125,6 @@ h4{
     font-size:14px;
 }
 
-/* Categories */
-/* Income Categories */
-
 .category{
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -160,9 +154,6 @@ h4{
     color:#aaa;
     transition:.3s;
 }
-
-/* Background Colors */
-
 .green i{
     background:#18d26e;
 }
@@ -183,13 +174,11 @@ h4{
     background:#ff8a00;
 }
 
-/* Hover */
 
 .icon:hover i{
     transform:scale(1.08);
 }
 
-/* Selected */
 
 .icon.selected i{
     border:3px solid #b6ff00;
@@ -201,7 +190,7 @@ h4{
     color:#b6ff00;
     font-weight:bold;
 }
-/* Save Button */
+
 button{
     width:100%;
     margin-top:25px;
@@ -233,3 +222,4 @@ button:hover{
     width:100% !important;
     height:280px !important;
 }
+

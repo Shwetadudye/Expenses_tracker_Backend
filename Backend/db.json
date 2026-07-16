@@ -2,5 +2,7 @@
     "users":[],
     "expenses":[],
     "income":[],
+    "reminders":[],
+    "budget":[],
     "Account":[]
 }

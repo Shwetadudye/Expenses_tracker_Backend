@@ -10,6 +10,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <link rel="stylesheet" href="../Css/Login.css">
 </head>
 <body>
       <form>
@@ -73,8 +74,13 @@
                     $("#password_error").text("Incorrect password.");
                     return;
                 }
-            alert('LOGIN SUCEESSFULLY');
-            console.log(user);
+
+         localStorage.setItem("userId", user.id);
+localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+alert("LOGIN SUCCESSFULLY");
+
+window.location.href="Home.html";
           },
           error: function (err) {
             console.log('error', err);
