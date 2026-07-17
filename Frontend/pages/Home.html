@@ -57,7 +57,7 @@
 
         <li id="profile">
             <i class="bi bi-person-circle"></i>
-            <span>Profile</span>
+            <span>Reminders</span>
         </li>
 
         <li id="logout">
@@ -247,9 +247,10 @@
         <div class="chart-card">
 
             <h4>Reminders</h4>
+            <div id="reminderList"></div>
 
             <div class="reminder-item">
-                <div id="reminderList"></div>
+
                 <i class="bi bi-bell-fill"></i>
 
                 <div>
@@ -297,6 +298,7 @@
             <h4>Upcoming</h4>
 
             <div class="upcoming-item">
+                <div id="upcomingList"></div>
 
                 <i class="bi bi-calendar-event"></i>
 
@@ -382,7 +384,7 @@
     $("#dash").click(() => window.location.href = "Home.html");
     $("#income").click(() => window.location.href = "Income.html");
     $("#expense").click(() => window.location.href = "Expenses.html");
-    $("#profile").click(() => window.location.href = "Profile.html");
+    $("#profile").click(() => window.location.href = "Reminder.html");
 
     $("#logout").click(function () {
         localStorage.removeItem("loggedInUser");
@@ -399,466 +401,208 @@
 
 
 
-    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (!currentUser) {
-        window.location.href = "login.html";
-        return;
-    }
-
-
-
-    $.when(
-
-        $.get("https://expenses-tracker-ccfm.onrender.com/income"),
-        $.get("https://expenses-tracker-ccfm.onrender.com/expenses")
-
-    ).done(function (incomeRes, expenseRes) {
-
-        let income = incomeRes[0].filter(i => i.userId == currentUser.id);
-        let expenses = expenseRes[0].filter(i => i.userId == currentUser.id);
-
-
-
-        // ---------------- Totals ----------------
-
-        let totalIncome = 0;
-        let totalExpense = 0;
-
-        income.forEach(item => totalIncome += Number(item.amount));
-        expenses.forEach(item => totalExpense += Number(item.amount));
-
-        $("#totalIncome").text("₹" + totalIncome);
-        $("#totalExpense").text("₹" + totalExpense);
-        $("#totalBalance").text("₹" + (totalIncome - totalExpense));
-
-
-
-        // ---------------- Budget ----------------
-
-        let budget = 25000;
-
-        let percent = (totalExpense / budget) * 100;
-
-        if (percent > 100) percent = 100;
-
-        $("#budgetProgress").css({
-            width: percent + "%",
-            background: "#6C63FF",
-            height: "100%"
-        });
-
-        $("#budgetPercent").text(percent.toFixed(1) + "% Used");
-
-
-
-        // ---------------- Monthly Data ----------------
-
-        let months = {
-            Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
-            Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
-        };
-
-        let expenseMonths = {
-            Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
-            Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
-        };
-
-
-
-        income.forEach(function(item){
-
-            let m = new Date(item.date).toLocaleString("default",{month:"short"});
-
-            months[m] += Number(item.amount);
-
-        });
-
-        expenses.forEach(function(item){
-
-            let m = new Date(item.date).toLocaleString("default",{month:"short"});
-
-            expenseMonths[m] += Number(item.amount);
-
-        });
-
-
-
-        // ---------------- Line Chart ----------------
-
-        new Chart(document.getElementById("financeChart"),{
-
-            type:"line",
-
-            data:{
-
-                labels:Object.keys(months),
-
-                datasets:[
-
-                    {
-
-                        label:"Income",
-
-                        data:Object.values(months),
-
-                        borderColor:"#22c55e",
-
-                        backgroundColor:"#22c55e",
-
-                        tension:.4
-
-                    },
-
-                    {
-
-                        label:"Expense",
-
-                        data:Object.values(expenseMonths),
-
-                        borderColor:"#ef4444",
-
-                        backgroundColor:"#ef4444",
-
-                        tension:.4
-
-                    }
-
-                ]
-
-            },
-
-            options:{
-
-                responsive:true,
-
-                plugins:{
-
-                    legend:{
-
-                        labels:{
-
-                            color:"white"
-
-                        }
-
-                    }
-
-                },
-
-                scales:{
-
-                    x:{
-
-                        ticks:{
-
-                            color:"white"
-
-                        }
-
-                    },
-
-                    y:{
-
-                        ticks:{
-
-                            color:"white"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
-
-
-
-        // ---------------- Bar Chart ----------------
-
-        new Chart(document.getElementById("expenseBarChart"),{
-
-            type:"bar",
-
-            data:{
-
-                labels:Object.keys(expenseMonths),
-
-                datasets:[{
-
-                    label:"Expenses",
-
-                    data:Object.values(expenseMonths),
-
-                    backgroundColor:"#6C63FF"
-
-                }]
-
-            },
-
-            options:{
-
-                responsive:true,
-
-                plugins:{
-
-                    legend:{
-
-                        labels:{
-
-                            color:"white"
-
-                        }
-
-                    }
-
-                },
-
-                scales:{
-
-                    x:{
-
-                        ticks:{
-
-                            color:"white"
-
-                        }
-
-                    },
-
-                    y:{
-
-                        ticks:{
-
-                            color:"white"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
-
-
-        // ---------------- Doughnut ----------------
-
-        let categoryData = {};
-
-        expenses.forEach(function(item){
-
-            let cat = item.category || "Other";
-
-            categoryData[cat] = (categoryData[cat] || 0) + Number(item.amount);
-
-        });
-
-        new Chart(document.getElementById("expensePieChart"),{
-
-            type:"doughnut",
-
-            data:{
-
-                labels:Object.keys(categoryData),
-
-                datasets:[{
-
-                    data:Object.values(categoryData)
-
-                }]
-
-            },
-
-            options:{
-
-                cutout:"70%",
-
-                plugins:{
-
-                    legend:{
-
-                        labels:{
-
-                            color:"white"
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
-
-
-        // ---------------- Quick Stats ----------------
-
-        $("#totalTransactions").text(income.length + expenses.length);
-
-        let highestExpense = 0;
-
-        expenses.forEach(item=>{
-
-            if(Number(item.amount)>highestExpense)
-
-                highestExpense=Number(item.amount);
-
-        });
-
-        $("#highestExpense").text("₹"+highestExpense);
-
-        let highestIncome = 0;
-
-        income.forEach(item=>{
-
-            if(Number(item.amount)>highestIncome)
-
-                highestIncome=Number(item.amount);
-
-        });
-
-        $("#highestIncome").text("₹"+highestIncome);
-
-
-
-    });
-
-
-
-    loadIncomeTransactions();
-
-});
+   const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+if(!currentUser){
+    window.location.href="login.html";
+    return;
+}
 
 $.when(
 
-$.get("https://expenses-tracker-ccfm.onrender.com/income"),
+    $.get("https://expenses-tracker-ccfm.onrender.com/income"),
+    $.get("https://expenses-tracker-ccfm.onrender.com/expenses"),
+    $.get("https://expenses-tracker-ccfm.onrender.com/budget")
 
-$.get("https://expenses-tracker-ccfm.onrender.com/expenses"),
+).done(function(incomeRes,expenseRes,budgetRes){
 
-$.get("https://expenses-tracker-ccfm.onrender.com/budget"),
+    let income = incomeRes[0].filter(i=>i.userId==currentUser.id);
+    let expenses = expenseRes[0].filter(i=>i.userId==currentUser.id);
 
-$.get("https://expenses-tracker-ccfm.onrender.com/reminders")
+    //---------------- Total ----------------//
 
-).done(function(incomeRes,expenseRes,budgetRes,reminderRes){
+    let totalIncome = 0;
+    let totalExpense = 0;
 
-let budget = budgetRes[0].find(b=>b.userId==currentUser.id);
+    income.forEach(i=>totalIncome+=Number(i.amount));
+    expenses.forEach(i=>totalExpense+=Number(i.amount));
 
-let budgetAmount = budget ? Number(budget.amount) : 0;
+    $("#totalIncome").text("₹"+totalIncome);
+    $("#totalExpense").text("₹"+totalExpense);
+    $("#totalBalance").text("₹"+(totalIncome-totalExpense));
 
-$("#budgetAmount").text("₹"+budgetAmount);
+    //---------------- Budget ----------------//
 
-let used=(totalExpense/budgetAmount)*100;
+    let budget = budgetRes[0].find(b=>b.userId==currentUser.id);
 
-if(used>100) used=100;
+    let budgetAmount = budget ? Number(budget.amount) : 25000;
 
-$("#budgetProgress").css("width",used+"%");
+    $("#budgetAmount").text("₹"+budgetAmount);
 
-$("#budgetPercent").text(used.toFixed(1)+"% Used");
-});
+    let used = (totalExpense/budgetAmount)*100;
 
-$("#reminderList").html("");
+    if(used>100){
+        used=100;
+    }
 
-reminderRes[0]
+    $("#budgetProgress").css("width",used+"%");
+    $("#budgetPercent").text(used.toFixed(1)+"% Used");
 
-.filter(r=>r.userId==currentUser.id && r.type=="Reminder")
+    //---------------- Months ----------------//
 
-.forEach(function(item){
+    let months={
+        Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
+        Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
+    };
 
-$("#reminderList").append(`
+    let expenseMonths={
+        Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
+        Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
+    };
 
-<div class="reminder-item">
+    income.forEach(function(item){
 
-<i class="bi bi-bell-fill"></i>
+        let m=new Date(item.date)
+        .toLocaleString("default",{month:"short"});
 
-<div>
+        months[m]+=Number(item.amount);
 
-<h6>${item.title}</h6>
+    });
 
-<small>${item.date}</small>
+    expenses.forEach(function(item){
 
-</div>
+        let m=new Date(item.date)
+        .toLocaleString("default",{month:"short"});
 
-</div>
+        expenseMonths[m]+=Number(item.amount);
 
-`);
+    });
 
-});
+    //---------------- Line Chart ----------------//
 
-$("#upcomingList").html("");
+    new Chart($("#financeChart"),{
 
-reminderRes[0]
+        type:"line",
 
-.filter(r=>r.userId==currentUser.id && r.type=="Upcoming")
+        data:{
 
-.forEach(function(item){
+            labels:Object.keys(months),
 
-$("#upcomingList").append(`
+            datasets:[
 
-<div class="upcoming-item">
+                {
+                    label:"Income",
+                    data:Object.values(months),
+                    borderColor:"#22c55e",
+                    tension:.4
+                },
 
-<i class="bi bi-calendar-event"></i>
+                {
+                    label:"Expense",
+                    data:Object.values(expenseMonths),
+                    borderColor:"#ef4444",
+                    tension:.4
+                }
 
-<span>${item.title}</span>
+            ]
 
-</div>
+        }
 
-`);
+    });
 
-});
+    //---------------- Bar Chart ----------------//
 
+    new Chart($("#expenseBarChart"),{
 
-function loadIncomeTransactions(){
+        type:"bar",
+
+        data:{
+
+            labels:Object.keys(expenseMonths),
+
+            datasets:[{
+
+                label:"Expense",
+
+                data:Object.values(expenseMonths),
+
+                backgroundColor:"#6C63FF"
+
+            }]
+
+        }
+
+    });
+
+    //---------------- Pie Chart ----------------//
+
+    let categoryData={};
+
+    expenses.forEach(function(item){
+
+        let cat=item.category||"Other";
+
+        categoryData[cat]=(categoryData[cat]||0)+Number(item.amount);
+
+    });
+
+    new Chart($("#expensePieChart"),{
+
+        type:"doughnut",
+
+        data:{
+
+            labels:Object.keys(categoryData),
+
+            datasets:[{
+
+                data:Object.values(categoryData)
+
+            }]
+
+        }
+
+    });
+
+    //---------------- Quick Stats ----------------//
+
+    $("#totalTransactions").text(income.length+expenses.length);
+
+    let highestExpense=Math.max(...expenses.map(x=>Number(x.amount)),0);
+
+    let highestIncome=Math.max(...income.map(x=>Number(x.amount)),0);
+
+    $("#highestExpense").text("₹"+highestExpense);
+    $("#highestIncome").text("₹"+highestIncome);
+
+  function loadReminders(){
 
     const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    $.get("https://expenses-tracker-ccfm.onrender.com/income",function(data){
+    $.get("https://expenses-tracker-ccfm.onrender.com/reminders", function(data){
 
-        $("#recentTransactions").html("");
+        $("#reminderList").html("");
 
-        data.filter(item=>item.userId==currentUser.id)
+        let today = new Date();
 
-        .forEach(function(item){
+        let reminders = data.filter(item =>
+            Number(item.userId) === Number(currentUser.id) &&
+            new Date(item.date) >= today
+        );
 
-            $("#recentTransactions").append(`
+        // Date ke hisab se sort
+        reminders.sort((a,b) => new Date(a.date) - new Date(b.date));
 
-                <tr>
+        reminders.forEach(function(item){
 
-                    <td>₹${item.amount}</td>
-
-                    <td>${item.title}</td>
-
-                    <td>${item.account}</td>
-
-                    <td>${item.category}</td>
-
-                    <td>${item.date}</td>
-
-                    <td>
-
-                        <button class="editIncome btn btn-warning btn-sm" data-id="${item.id}">
-
-                            <i class="bi bi-pencil"></i>
-
-                        </button>
-
-                        <button class="deleteIncome btn btn-danger btn-sm" data-id="${item.id}">
-
-                            <i class="bi bi-trash"></i>
-
-                        </button>
-
-                    </td>
-
-                </tr>
-
+            $("#reminderList").append(`
+                <div class="reminder-item">
+                    <i class="bi bi-bell-fill"></i>
+                    <div>
+                        <h6>${item.title}</h6>
+                        <small>${item.date}</small>
+                    </div>
+                </div>
             `);
 
         });
@@ -866,77 +610,54 @@ function loadIncomeTransactions(){
     });
 
 }
+function loadUpcoming(){
 
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
+    $.get("https://expenses-tracker-ccfm.onrender.com/reminders", function(data){
 
-$(document).on("click",".deleteIncome",function(){
+        $("#upcomingList").html("");
 
-    let id=$(this).data("id");
+        let today = new Date();
 
-    if(confirm("Delete this income?")){
+        let reminders = data.filter(item =>
+            Number(item.userId) === Number(currentUser.id) &&
+            new Date(item.date) >= today
+        );
 
-        $.ajax({
+        // Date ascending order
+        reminders.sort((a,b) => new Date(a.date) - new Date(b.date));
 
-            url:"https://expenses-tracker-ccfm.onrender.com/income/"+id,
+        if(reminders.length > 0){
 
-            method:"DELETE",
+            let nextReminder = reminders[0];
 
-            success:function(){
+            $("#upcomingList").html(`
+                <div class="upcoming-item">
+                    <i class="bi bi-calendar-event"></i>
+                    <div>
+                        <h6>${nextReminder.title}</h6>
+                        <small>${nextReminder.date}</small>
+                    </div>
+                </div>
+            `);
 
-                loadIncomeTransactions();
+        }else{
 
-                location.reload();
+            $("#upcomingList").html("<p>No Upcoming Reminder</p>");
 
-            }
-
-        });
-
-    }
-
-});
-
-
-
-$(document).on("click",".editIncome",function(){
-
-    let id=$(this).data("id");
-
-    $.get("https://expenses-tracker-ccfm.onrender.com/income/"+id,function(item){
-
-        let title=prompt("Title",item.title);
-
-        let amount=prompt("Amount",item.amount);
-
-        if(title==null || amount==null) return;
-
-        $.ajax({
-
-            url:"https://expenses-tracker-ccfm.onrender.com/income/"+id,
-
-            method:"PATCH",
-
-            contentType:"application/json",
-
-            data:JSON.stringify({
-
-                title:title,
-
-                amount:amount
-
-            }),
-
-            success:function(){
-
-                loadIncomeTransactions();
-
-                location.reload();
-
-            }
-
-        });
+        }
 
     });
 
+}
+    //---------------- Load Lists ----------------//
+
+    loadIncomeTransactions();
+    loadReminders();
+    loadUpcoming();
 });
+});
+
 </script>
 </html>

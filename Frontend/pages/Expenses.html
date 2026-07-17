@@ -106,9 +106,6 @@ Save Transaction
     });
 
     // Account Select
-   $(document).ready(function () {
-
-    let selectedAccount = "Cash";
 
     $(".card").click(function () {
 
@@ -120,7 +117,7 @@ Save Transaction
 
         console.log(selectedAccount);
 
-    });
+
 
 });
 
@@ -150,7 +147,6 @@ if (isNaN(amount) || amount <= 0) {
         let title = $("#title").val();
         let date = $("#date").val();
         let note = $("#note").val();
-
 
         if(title==""){
             alert("Enter Title");
@@ -183,20 +179,30 @@ let expense={
 
 };
 
-        console.log(expense);
 
         alert("Expense Saved Successfully ✅");
 
         // API Call yaha karna
-        $.ajax({
-            url:"https://expenses-tracker-ccfm.onrender.com/expenses",
-            method:"POST",
-            contentType:"application/json",
-            data:JSON.stringify(expense),
-            success:function(){
-                alert("Expense Added");
-            }
-        });
+       $.ajax({
+    url:"https://expenses-tracker-ccfm.onrender.com/expenses",
+    method:"POST",
+    contentType:"application/json",
+    data:JSON.stringify(expense),
+
+    success:function(){
+
+        alert("Expense Added Successfully ✅");
+
+        window.location.href="Home.html";
+
+    },
+
+    error:function(){
+
+        alert("Failed to Add Expense");
+
+    }
+});
         
 
     });

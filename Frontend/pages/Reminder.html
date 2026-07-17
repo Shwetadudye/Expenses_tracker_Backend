@@ -4,92 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link rel="stylesheet" href="../Css/Reminder.css">
 </head>
 <body>
-    <div class="container mt-4">
+ <div class="container">
 
-    <h3>Add Reminder</h3>
+    <div class="form-card">
 
-    <form id="reminderForm">
+        <h2>Add Reminder</h2>
 
-        <div class="mb-3">
-            <label>Title</label>
-            <input type="text" id="title" class="form-control" required>
-        </div>
+        <form>
 
-        <div class="mb-3">
-            <label>Date</label>
-            <input type="date" id="date" class="form-control" required>
-        </div>
+            <input id="reminder" type="text" placeholder="Enter Reminder">
 
-        <div class="mb-3">
-            <label>Type</label>
+            <input id="date" type="date">
 
-            <select id="type" class="form-select">
+            <button type="submit">Add Reminder</button>
 
-                <option value="Reminder">Reminder</option>
-                <option value="Upcoming">Upcoming</option>
+        </form>
 
-            </select>
+    </div>
 
-        </div>
 
-        <button type="submit" class="btn btn-primary">
-            Add Reminder
-        </button>
+    <div class="table-card">
 
-    </form>
+        <h2>Reminder List</h2>
+
+        <div id="reminderData"></div>
+
+    </div>
 
 </div>
 </body>
 <script>
-    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    $(function(){
+        const API =`https://expenses-tracker-ccfm.onrender.com/reminders`;
 
-$("#reminderForm").submit(function(e){
-
+        $('form').submit(function(e){
     e.preventDefault();
 
-    let title = $("#title").val().trim();
-    let date = $("#date").val();
-    let type = $("#type").val();
+    const reminder = $('#reminder').val();
+    const reminderDate = $('#date').val();
+
+    if(reminder == ""){
+    alert("Please Enter Reminder");
+    $("#reminder").focus();
+    return;
+}
+
+if(reminderDate == ""){
+    alert("Please Select Date");
+    $("#date").focus();
+    return;
+}
+
+    const reminderData = {
+        reminder: reminder,
+        reminderDate: reminderDate,
+    };
+
+    if(editId == null){
+
+        // ADD
+        $.ajax({
+            url: API,
+            method: "POST",
+            data: JSON.stringify(reminderData),
+            contentType: "application/json",
+
+            success:function(){
+
+                Render_UI();
+
+                $('#reminder').val("");
+                $('#date').val("");
+
+            }
+
+        });
+
+    }else{
 
     $.ajax({
-
-        url:"https://expenses-tracker-ccfm.onrender.com/reminders",
-
-        method:"POST",
-
+        url:`${API}/${editId}`,
+        method:"PUT",
         contentType:"application/json",
-
         data:JSON.stringify({
-
-            userId: currentUser.id,
-
-            title: title,
-
-            date: date,
-
-            type: type
-
+            reminder: $("#reminder").val(),
+            reminderDate: $("#date").val()
         }),
 
         success:function(){
 
-            alert("Reminder Added Successfully");
+            editId = null;
 
-            $("#reminderForm")[0].reset();
+            $("button[type='submit']").text("Add Reminder");
 
-        },
+            $("#reminder").val("");
+            $("#date").val("");
 
-        error:function(){
-
-            alert("Something went wrong");
+            Render_UI();
 
         }
 
     });
 
+}
+
 });
+
+    const Render_UI = () => {
+        $.get(API)
+          .done((res) => {
+            console.log(`🚀 ~ res:`, res);
+
+            if (res.length && res) {
+              $('#reminderData')
+                .css('display', 'block')
+                .append(function () {
+                  $(this).html(`<table>
+            <thead>
+               <th>sr no</th>
+               <th>email</th>
+               <th>password</th>
+               <th>action</th>
+            </thead>
+            <tbody></tbody>
+            </table>`);
+
+                  res.map((el,index) => {
+                    $('tbody').append(`
+               <tr>
+                <td>${index+1}</td>
+                <td>${el.reminder }</td>
+                <td>${el.reminderDate }</td>
+                <td>
+                <button id="editBtn" data-id="${el.id}">edit</button>
+                <button id="deleteBtn" data-id="${el.id}">delete</button>
+                </td>
+                </tr>               
+                `);
+                  });
+                });
+            }
+          })
+          .fail((err) => console.log(err));
+      };
+ let editId = null;
+$(document).on("click", "#editBtn", function() {
+    const id = $(this).closest('tr').find('td:first').text();
+    
+    $.ajax({
+        url: `${API}/${id}`,
+        method: 'GET',
+        success: function (data) {
+            console.log('successful', data);
+             editId = id;
+            $("#reminder").val(data.reminder);
+            $("#date").val(data.reminderDate);
+
+            // button text change
+            $("button[type='submit']").text("Update");
+        },
+    });
+});
+
+
+     $(document).on('click', '#deleteBtn', function () {
+        const id = $(this).closest('tr').find('td:first').text();
+        $.ajax({
+          url: `${API}/${id}`,
+          method: 'DELETE',
+          success: function (data) {
+            console.log('successful', data);
+            Render_UI();
+          },
+          error: function (err) {
+            console.log('error', err);
+          },
+          complete: function () {
+            console.log('done');
+          },
+        });
+      });
+      Render_UI();
+    })
 </script>
 </html>
