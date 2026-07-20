@@ -4,91 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="stylesheet" href="../Css/Reminder.css">
+    <link rel="stylesheet" href="../Components/SideBar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+   
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
       integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <link rel="stylesheet" href="../Css/Reminder.css">
 </head>
 <body>
- <div class="container">
-
-    <div class="form-card">
-
-        <h2>Add Reminder</h2>
+    <div id="sidebar"></div>
+    <div class="container">
+        <div class="form-card">
+            <h2>Add Reminder</h2>
 
         <form>
-
             <input id="reminder" type="text" placeholder="Enter Reminder">
-
             <input id="date" type="date">
-
             <button type="submit">Add Reminder</button>
-
         </form>
 
     </div>
 
-
     <div class="table-card">
-
         <h2>Reminder List</h2>
-
         <div id="reminderData"></div>
 
     </div>
-
 </div>
 </body>
 <script>
-    $(function(){
-        const API =`https://expenses-tracker-ccfm.onrender.com/reminders`;
+   $(document).ready(function(){
+   $("#sidebar").load("../Components/Sidebar.html", function(response,status){
+        if(status === "success"){
+            $("#dash").click(()=>location.href="Home.html");
+            $("#income").click(()=>location.href="Income.html");
+            $("#expense").click(()=>location.href="Expenses.html");
+            $("#transaction").click(()=>location.href="Transactions.html");
+            $("#reminderPage").click(()=>location.href="Reminder.html");
+            $("#logout").click(function(){
+                localStorage.removeItem("loggedInUser");
+                location.href="login.html";
+            });
 
+        }
+
+    });
+        const API =`https://expenses-tracker-ccfm.onrender.com/reminders`; 
         $('form').submit(function(e){
-    e.preventDefault();
+            e.preventDefault();
+            const reminder = $('#reminder').val();
+            const reminderDate = $('#date').val();
+            if(reminder == ""){
+                alert("Please Enter Reminder");
+                $("#reminder").focus();
+                return;
+            }
 
-    const reminder = $('#reminder').val();
-    const reminderDate = $('#date').val();
-
-    if(reminder == ""){
-    alert("Please Enter Reminder");
-    $("#reminder").focus();
-    return;
+            if(reminderDate == ""){
+                    alert("Please Select Date");
+                     $("#date").focus();
+                     return;
 }
-
-if(reminderDate == ""){
-    alert("Please Select Date");
-    $("#date").focus();
-    return;
-}
-
+const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const reminderData = {
+         userId: currentUser.id,
         reminder: reminder,
         reminderDate: reminderDate,
     };
 
     if(editId == null){
-
-        // ADD
         $.ajax({
             url: API,
             method: "POST",
             data: JSON.stringify(reminderData),
             contentType: "application/json",
-
             success:function(){
-
                 Render_UI();
-
                 $('#reminder').val("");
                 $('#date').val("");
-
             }
-
         });
-
     }else{
 
     $.ajax({
@@ -99,37 +99,28 @@ if(reminderDate == ""){
             reminder: $("#reminder").val(),
             reminderDate: $("#date").val()
         }),
-
         success:function(){
-
             editId = null;
-
             $("button[type='submit']").text("Add Reminder");
-
             $("#reminder").val("");
             $("#date").val("");
-
             Render_UI();
-
         }
-
     });
-
 }
-
 });
 
     const Render_UI = () => {
         $.get(API)
           .done((res) => {
             console.log(`🚀 ~ res:`, res);
-
             if (res.length && res) {
               $('#reminderData')
                 .css('display', 'block')
                 .append(function () {
                   $(this).html(`<table>
             <thead>
+            <th style="display:none;">ID</th>
                <th>sr no</th>
                <th>email</th>
                <th>password</th>
@@ -140,16 +131,17 @@ if(reminderDate == ""){
 
                   res.map((el,index) => {
                     $('tbody').append(`
-               <tr>
-                <td>${index+1}</td>
-                <td>${el.reminder }</td>
-                <td>${el.reminderDate }</td>
-                <td>
-                <button id="editBtn" data-id="${el.id}">edit</button>
-                <button id="deleteBtn" data-id="${el.id}">delete</button>
-                </td>
-                </tr>               
-                `);
+<tr>
+    <td style="display:none;">${el.id}</td>
+    <td>${index+1}</td>
+    <td>${el.reminder}</td>
+    <td>${el.reminderDate}</td>
+    <td>
+        <button id="editBtn">Edit</button>
+        <button id="deleteBtn">Delete</button>
+    </td>
+</tr>
+`);
                   });
                 });
             }
@@ -168,13 +160,10 @@ $(document).on("click", "#editBtn", function() {
              editId = id;
             $("#reminder").val(data.reminder);
             $("#date").val(data.reminderDate);
-
-            // button text change
             $("button[type='submit']").text("Update");
         },
     });
 });
-
 
      $(document).on('click', '#deleteBtn', function () {
         const id = $(this).closest('tr').find('td:first').text();

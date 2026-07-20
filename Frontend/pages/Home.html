@@ -5,116 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker Dashboard</title>
 
-    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../Components/SideBar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- Google Font -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Chart JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- jQuery -->
-    <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js">
-    </script>
-
     <link rel="stylesheet" href="../Css/Home.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 </head>
 
 <body>
-
-<!-- ================= Sidebar ================= -->
-
-<div class="sidebar">
-
-    <div class="logo">
-        <img src="../Images/logo.png" alt="">
-        <h3>Expense Tracker</h3>
-    </div>
-
-    <ul>
-
-        <li id="dash">
-            <i class="bi bi-house-door-fill"></i>
-            <span>Dashboard</span>
-        </li>
-
-        <li id="income">
-            <i class="bi bi-wallet2"></i>
-            <span>Income</span>
-        </li>
-
-        <li id="expense">
-            <i class="bi bi-cash-stack"></i>
-            <span>Expenses</span>
-        </li>
-
-        <li id="profile">
-            <i class="bi bi-person-circle"></i>
-            <span>Reminders</span>
-        </li>
-
-        <li id="logout">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Logout</span>
-        </li>
-
-    </ul>
-
-</div>
-
-<!-- ================= Main ================= -->
-
-<div class="main">
-
-    <!-- Header -->
-
-    <div class="header">
-
-        <div class="header-left">
-
+    <div id="sidebar"></div>
+     <div class="main">
+        <div class="header">
+            <div class="header-left">
             <h2>Dashboard</h2>
-
             <p>Welcome Back 👋</p>
-
-        </div>
-
-        <div class="header-right">
-
-            <button class="notification">
-                <i class="bi bi-bell"></i>
-            </button>
-
-            <div class="profile-box">
-
-                <i class="bi bi-person-circle"></i>
-
-                <span>User</span>
-
-            </div>
-
         </div>
 
     </div>
-
-    <!-- Floating Button -->
 
     <div id="btn">
-
         <button id="add-btn">
-
             <i class="bi bi-plus"></i>
-
         </button>
 
         <div id="menu">
-
             <div class="item">
                 <i class="bi bi-arrow-left-right"></i>
                 <span>Transfer</span>
@@ -134,71 +53,44 @@
 
     </div>
 
-    <!-- Dashboard Cards -->
-
     <div class="summary-cards">
-
         <div class="summary-card balance">
-
             <h5>Total Balance</h5>
-
             <h2 id="totalBalance">₹0</h2>
-
         </div>
 
         <div class="summary-card income">
-
             <h5>Total Income</h5>
-
             <h2 id="totalIncome">₹0</h2>
-
         </div>
 
         <div class="summary-card expense">
-
             <h5>Total Expense</h5>
-
             <h2 id="totalExpense">₹0</h2>
-
         </div>
 
-        <div class="summary-card budget">
+       <div class="summary-card budget">
+        <h5>Spend Rate</h5>
+        <h2 id="spendRate">0%</h2>
 
-            <h5>Monthly Budget</h5>
-            <h2 id="budgetAmount">₹0</h2>
-
-            <div class="progress">
-
-                <div id="budgetProgress"></div>
-
-            </div>
-
-            <p id="budgetPercent">0% Used</p>
-
-        </div>
-
+    <div class="progress">
+        <div id="spendProgress"></div>
     </div>
 
-    <!-- Dashboard Grid Starts -->
+    <p id="spendText">0% of income spent</p>
+</div>
+</div>
 
     <div class="dashboard-grid">
-
-            <!-- Left Side -->
-
     <div class="left-panel">
 
         <div class="chart-card">
-
             <h4>Expense Categories</h4>
-
             <canvas id="expensePieChart"></canvas>
-
         </div>
 
         <div class="chart-card">
-
             <h4>Quick Stats</h4>
-
             <div class="quick-item">
                 <span>Total Transactions</span>
                 <h5 id="totalTransactions">0</h5>
@@ -218,177 +110,71 @@
 
     </div>
 
-    <!-- Center -->
-
     <div class="center-panel">
-
         <div class="chart-card">
-
             <h4>Income vs Expenses</h4>
-
             <canvas id="financeChart"></canvas>
-
         </div>
 
         <div class="chart-card">
-
             <h4>Monthly Expenses</h4>
-
             <canvas id="expenseBarChart"></canvas>
-
         </div>
-
     </div>
-
-    <!-- Right -->
 
     <div class="right-panel">
-
-        <div class="chart-card">
-
+        <div class="chart-card reminder-card">
             <h4>Reminders</h4>
             <div id="reminderList"></div>
-
-            <div class="reminder-item">
-
-                <i class="bi bi-bell-fill"></i>
-
-                <div>
-
-                    <h6>Electricity Bill</h6>
-
-                    <small>25 July</small>
-
-                </div>
-
-            </div>
-
-            <div class="reminder-item">
-
-                <i class="bi bi-bell-fill"></i>
-
-                <div>
-
-                    <h6>Netflix Subscription</h6>
-
-                    <small>27 July</small>
-
-                </div>
-
-            </div>
-
-            <div class="reminder-item">
-
-                <i class="bi bi-bell-fill"></i>
-
-                <div>
-
-                    <h6>EMI Payment</h6>
-
-                    <small>30 July</small>
-
-                </div>
-
-            </div>
-
         </div>
 
-        <div class="chart-card">
-
+        <div class="chart-card upcoming-card">
             <h4>Upcoming</h4>
-
-            <div class="upcoming-item">
-                <div id="upcomingList"></div>
-
-                <i class="bi bi-calendar-event"></i>
-
-                <span>Salary Credit</span>
-
-            </div>
-
-            <div class="upcoming-item">
-
-                <i class="bi bi-calendar-event"></i>
-
-                <span>Rent Payment</span>
-
-            </div>
-
-            <div class="upcoming-item">
-
-                <i class="bi bi-calendar-event"></i>
-
-                <span>Insurance Premium</span>
-
-            </div>
-
+            <div id="upcomingList"></div>
         </div>
-
     </div>
-
 </div>
 
-<!-- Recent Transactions -->
-
 <div class="recent-card">
-
     <div class="table-header">
-
         <h3>Recent Transactions</h3>
-
     </div>
 
     <table class="table table-hover align-middle">
-
         <thead>
-
             <tr>
-
                 <th>Amount</th>
-
                 <th>Title</th>
-
                 <th>Account</th>
-
                 <th>Category</th>
-
                 <th>Date</th>
-
                 <th>Action</th>
-
             </tr>
-
         </thead>
-
         <tbody id="recentTransactions">
-
         </tbody>
-
     </table>
-
 </div>
-
 </div>
-
-<!-- Bootstrap -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
 
 </body>
 <script>
     $(document).ready(function () {
 
-    // ---------------- Navigation ----------------
+   $("#sidebar").load("../Components/Sidebar.html", function(response,status){
+        if(status === "success"){
 
-    $("#dash").click(() => window.location.href = "Home.html");
-    $("#income").click(() => window.location.href = "Income.html");
-    $("#expense").click(() => window.location.href = "Expenses.html");
-    $("#profile").click(() => window.location.href = "Reminder.html");
+            $("#dash").click(()=>location.href="Home.html");
+            $("#income").click(()=>location.href="Income.html");
+            $("#expense").click(()=>location.href="Expenses.html");
+            $("#transaction").click(()=>location.href="Transactions.html");
+            $("#reminderPage").click(()=>location.href="Reminder.html");
 
-    $("#logout").click(function () {
-        localStorage.removeItem("loggedInUser");
-        window.location.href = "login.html";
+            $("#logout").click(function(){
+                localStorage.removeItem("loggedInUser");
+                location.href="login.html";
+            });
+        }
     });
 
     $("#add-btn").click(function () {
@@ -399,28 +185,22 @@
     $("#income-btn").click(() => window.location.href = "Income.html");
     $("#expense-btn").click(() => window.location.href = "Expenses.html");
 
-
-
    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-if(!currentUser){
+   if(!currentUser){
     window.location.href="login.html";
     return;
 }
 
 $.when(
-
     $.get("https://expenses-tracker-ccfm.onrender.com/income"),
     $.get("https://expenses-tracker-ccfm.onrender.com/expenses"),
-    $.get("https://expenses-tracker-ccfm.onrender.com/budget")
-
-).done(function(incomeRes,expenseRes,budgetRes){
+    $.get("https://expenses-tracker-ccfm.onrender.com/budget"),
+    $.get("https://expenses-tracker-ccfm.onrender.com/reminders")
+).done(function(incomeRes,expenseRes,budgetRes, reminderRes){
 
     let income = incomeRes[0].filter(i=>i.userId==currentUser.id);
     let expenses = expenseRes[0].filter(i=>i.userId==currentUser.id);
-
-    //---------------- Total ----------------//
-
+    let data = reminderRes[0];
     let totalIncome = 0;
     let totalExpense = 0;
 
@@ -429,27 +209,30 @@ $.when(
 
     $("#totalIncome").text("₹"+totalIncome);
     $("#totalExpense").text("₹"+totalExpense);
-    $("#totalBalance").text("₹"+(totalIncome-totalExpense));
+    let totalBalance = totalIncome - totalExpense;
+    if(totalBalance < 0){
+    totalBalance = 0;
+    $("#totalBalance").css("color","red");
+}
+$("#totalBalance").text("₹"+totalBalance);
+let spendRate = 0;
+if(totalIncome > 0){
+    spendRate = (totalExpense / totalIncome) * 100;
+}
 
-    //---------------- Budget ----------------//
+if(spendRate > 100){
+    spendRate = 100;
+}
+$("#spendRate").text(spendRate.toFixed(1)+"%");
 
-    let budget = budgetRes[0].find(b=>b.userId==currentUser.id);
+$("#spendProgress").css(
+    "width",
+    spendRate+"%"
+);
 
-    let budgetAmount = budget ? Number(budget.amount) : 25000;
-
-    $("#budgetAmount").text("₹"+budgetAmount);
-
-    let used = (totalExpense/budgetAmount)*100;
-
-    if(used>100){
-        used=100;
-    }
-
-    $("#budgetProgress").css("width",used+"%");
-    $("#budgetPercent").text(used.toFixed(1)+"% Used");
-
-    //---------------- Months ----------------//
-
+$("#spendText").text(
+    spendRate.toFixed(1)+"% of income spent"
+);
     let months={
         Jan:0,Feb:0,Mar:0,Apr:0,May:0,Jun:0,
         Jul:0,Aug:0,Sep:0,Oct:0,Nov:0,Dec:0
@@ -477,19 +260,11 @@ $.when(
         expenseMonths[m]+=Number(item.amount);
 
     });
-
-    //---------------- Line Chart ----------------//
-
     new Chart($("#financeChart"),{
-
         type:"line",
-
         data:{
-
             labels:Object.keys(months),
-
             datasets:[
-
                 {
                     label:"Income",
                     data:Object.values(months),
@@ -503,39 +278,23 @@ $.when(
                     borderColor:"#ef4444",
                     tension:.4
                 }
-
             ]
-
         }
 
     });
-
-    //---------------- Bar Chart ----------------//
-
     new Chart($("#expenseBarChart"),{
-
         type:"bar",
-
         data:{
-
             labels:Object.keys(expenseMonths),
-
             datasets:[{
-
                 label:"Expense",
-
                 data:Object.values(expenseMonths),
-
                 backgroundColor:"#6C63FF"
-
             }]
 
         }
 
     });
-
-    //---------------- Pie Chart ----------------//
-
     let categoryData={};
 
     expenses.forEach(function(item){
@@ -545,119 +304,105 @@ $.when(
         categoryData[cat]=(categoryData[cat]||0)+Number(item.amount);
 
     });
-
     new Chart($("#expensePieChart"),{
-
         type:"doughnut",
-
         data:{
-
             labels:Object.keys(categoryData),
-
             datasets:[{
-
                 data:Object.values(categoryData)
-
             }]
 
         }
 
     });
 
-    //---------------- Quick Stats ----------------//
-
     $("#totalTransactions").text(income.length+expenses.length);
-
     let highestExpense=Math.max(...expenses.map(x=>Number(x.amount)),0);
-
     let highestIncome=Math.max(...income.map(x=>Number(x.amount)),0);
-
     $("#highestExpense").text("₹"+highestExpense);
     $("#highestIncome").text("₹"+highestIncome);
 
-  function loadReminders(){
+function loadReminders() {
+    $("#reminderList").empty();
+    let today = new Date();
+    today.setHours(0,0,0,0);
+    let reminders = data.filter(function(item){
 
-    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        let d = new Date(item.reminderDate);
+        d.setHours(0,0,0,0);
 
-    $.get("https://expenses-tracker-ccfm.onrender.com/reminders", function(data){
+        return Number(item.userId) === Number(currentUser.id) && d >= today;
 
-        $("#reminderList").html("");
+    });
 
-        let today = new Date();
+    reminders.sort((a,b)=>new Date(a.reminderDate)-new Date(b.reminderDate));
 
-        let reminders = data.filter(item =>
-            Number(item.userId) === Number(currentUser.id) &&
-            new Date(item.date) >= today
-        );
+    if(reminders.length===0){
+        $("#reminderList").html("<p>No Reminder</p>");
+        return;
+    }
 
-        // Date ke hisab se sort
-        reminders.sort((a,b) => new Date(a.date) - new Date(b.date));
+    reminders.forEach(function(item){
 
-        reminders.forEach(function(item){
+        $("#reminderList").append(`
+            <div class="reminder-item">
+                <i class="bi bi-bell-fill"></i>
 
-            $("#reminderList").append(`
-                <div class="reminder-item">
-                    <i class="bi bi-bell-fill"></i>
-                    <div>
-                        <h6>${item.title}</h6>
-                        <small>${item.date}</small>
-                    </div>
+                <div class="reminder-content">
+                    <h6>${item.reminder}</h6>
+                    <small>${item.reminderDate}</small>
                 </div>
-            `);
-
-        });
+            </div>
+        `);
 
     });
 
 }
-function loadUpcoming(){
+function loadUpcoming() {
+    $("#upcomingList").empty();
 
-    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    let today = new Date();
+    today.setHours(0,0,0,0);
 
-    $.get("https://expenses-tracker-ccfm.onrender.com/reminders", function(data){
+    let upcoming = data.filter(function(item){
 
-        $("#upcomingList").html("");
+        let d = new Date(item.reminderDate);
+        d.setHours(0,0,0,0);
 
-        let today = new Date();
-
-        let reminders = data.filter(item =>
-            Number(item.userId) === Number(currentUser.id) &&
-            new Date(item.date) >= today
-        );
-
-        // Date ascending order
-        reminders.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-        if(reminders.length > 0){
-
-            let nextReminder = reminders[0];
-
-            $("#upcomingList").html(`
-                <div class="upcoming-item">
-                    <i class="bi bi-calendar-event"></i>
-                    <div>
-                        <h6>${nextReminder.title}</h6>
-                        <small>${nextReminder.date}</small>
-                    </div>
-                </div>
-            `);
-
-        }else{
-
-            $("#upcomingList").html("<p>No Upcoming Reminder</p>");
-
-        }
+        return Number(item.userId) === Number(currentUser.id) && d > today;
 
     });
 
-}
-    //---------------- Load Lists ----------------//
+    upcoming.sort(function(a,b){
+        return new Date(a.reminderDate) - new Date(b.reminderDate);
+    });
 
-    loadIncomeTransactions();
+    if(upcoming.length === 0){
+        $("#upcomingList").html("<p>No Upcoming</p>");
+        return;
+    }
+
+    let item = upcoming[0];
+
+    $("#upcomingList").append(`
+        <div class="upcoming-item">
+            <i class="bi bi-calendar-event-fill"></i>
+
+            <div class="upcoming-content">
+                <h6>${item.reminder}</h6>
+                <small>${item.reminderDate}</small>
+            </div>
+
+        </div>
+    `);
+
+}
     loadReminders();
     loadUpcoming();
 });
 });
+
+
 
 </script>
 </html>

@@ -4,5 +4,6 @@
     "income":[],
     "reminders":[],
     "budget":[],
+    "transactions":[],
     "Account":[]
 }

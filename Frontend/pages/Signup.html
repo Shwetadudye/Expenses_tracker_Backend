@@ -4,26 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
+
+    <link rel="stylesheet" href="../Css/Signup.css">
       <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
       integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <link rel="stylesheet" href="../Css/Signup.css">
-      <style>
-      #userData {
-        display: none;
-      }
-      table {
-        border: 2px inset gray;
-      }
-
-      td,
-      th {
-        border: 1px outset gray;
-      }
-    </style>
+     
 </head>
 <body>
       <form>
@@ -56,8 +45,6 @@
     $(function () {
       const API = `https://expenses-tracker-ccfm.onrender.com/users`;
 
-      // this is for post the data Post  client to server [POST]
-
       $('form').submit(function (e) {
         e.preventDefault();
         const name = $('#username').val();
@@ -67,13 +54,11 @@
 
         let isValid = true;
 
-        // Username Validation
         if (name === "") {
             $("#name_error").text("Please enter username.");
             isValid = false;
         }
 
-        // Email Validation
         if (email === "") {
             $("#email_error").text("Please enter email.");
             isValid = false;
@@ -88,7 +73,6 @@
             isValid = false;
         }
 
-         // Password Validation
         if (password === "") {
             $("#password_error").text("Please enter password.");
             isValid = false;
@@ -116,7 +100,6 @@
             }
         }
 
-        // Phone Validation
         if (phone === "") {
             $("#phone_error").text("Please enter phone number.");
             isValid = false;
@@ -126,8 +109,6 @@
         }
 
         if (!isValid) return;
-       
-
         const userData = {
           name : name,
           email: email,
