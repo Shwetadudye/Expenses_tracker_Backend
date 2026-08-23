@@ -24,7 +24,7 @@
         </div>
 
         <div>
-            <h2>Add Income</h2>
+            <h2>Add Monthly Income</h2>
             <p>Manage and track your income</p>
         </div>
 
@@ -38,7 +38,7 @@
                 type="number"
                 id="amount"
                 placeholder="₹1200000"
-                min="12000000">
+                >
             </div>
             <div class="field">
                 <label>Income Title</label>
@@ -62,7 +62,7 @@
         </div>
         <div class="right-side">
             <div class="card-box">
-                <h3>Source Account</h3>
+                <h3>Source Mode</h3>
                 <div class="account">
                     <div class="account-card active" data-account="Cash">
                         <i class="fa-solid fa-wallet"></i>
@@ -114,6 +114,7 @@
     </button>
 </div>
 </div>
+</div>
 </body>
 <script>
 $(document).ready(function(){
@@ -155,13 +156,11 @@ $(document).ready(function(){
         let title=$("#title").val();
         let date=$("#date").val();
         let note=$("#note").val();
-        amount = Number(amount);
-        if (isNaN(amount) || amount <= 120000) {
-            alert("please enter your yearly income");
-            $("#amount").focus();
+
+         if(amount==""){
+            alert("please enter your amount");
             return;
         }
-
         if(title==""){
             alert("Enter Title");
             return;

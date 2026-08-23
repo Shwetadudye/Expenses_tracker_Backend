@@ -20,169 +20,287 @@
     <div id="sidebar"></div>
     <div class="container">
         <div class="form-card">
-            <h2>Add Reminder</h2>
+            <h2>
+                <i class="bi bi-calendar-event-fill"></i>
+                Add Reminder</h2>
 
         <form>
-            <input id="reminder" type="text" placeholder="Enter Reminder">
-            <input id="date" type="date">
-            <button type="submit">Add Reminder</button>
+          <div class="field">
+    <label>Reminder</label>
+    <input id="reminder" type="text" placeholder="Enter reminder...">
+</div>
+
+<div class="field dateField">
+    <label>Date</label>
+    <input id="date" type="date">
+</div>
+
+<button type="submit">
+    <i class="bi bi-plus-circle"></i>
+    Add Reminder
+</button>
         </form>
 
     </div>
 
     <div class="table-card">
-        <h2>Reminder List</h2>
+        <h2>
+            <i class="bi bi-list-check"></i>
+            Reminder List</h2>
         <div id="reminderData"></div>
 
     </div>
 </div>
 </body>
 <script>
-   $(document).ready(function(){
-   $("#sidebar").load("../Components/Sidebar.html", function(response,status){
-        if(status === "success"){
-            $("#dash").click(()=>location.href="Home.html");
-            $("#income").click(()=>location.href="Income.html");
-            $("#expense").click(()=>location.href="Expenses.html");
-            $("#transaction").click(()=>location.href="Transactions.html");
-            $("#reminderPage").click(()=>location.href="Reminder.html");
-            $("#logout").click(function(){
+$(document).ready(function () {
+
+    $("#sidebar").load("../Components/Sidebar.html", function (response, status) {
+
+        if (status === "success") {
+
+            $("#dash").click(() => location.href = "Home.html");
+            $("#income").click(() => location.href = "Income.html");
+            $("#expense").click(() => location.href = "Expenses.html");
+            $("#transaction").click(() => location.href = "Transactions.html");
+            $("#reminderPage").click(() => location.href = "Reminder.html");
+            $("#calculator").click(() => location.href = "Calculator.html");
+
+            $("#logout").click(function () {
                 localStorage.removeItem("loggedInUser");
-                location.href="login.html";
+                location.href = "login.html";
             });
 
         }
 
     });
-        const API =`https://expenses-tracker-ccfm.onrender.com/reminders`; 
-        $('form').submit(function(e){
-            e.preventDefault();
-            const reminder = $('#reminder').val();
-            const reminderDate = $('#date').val();
-            if(reminder == ""){
-                alert("Please Enter Reminder");
-                $("#reminder").focus();
-                return;
-            }
 
-            if(reminderDate == ""){
-                    alert("Please Select Date");
-                     $("#date").focus();
-                     return;
-}
-const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const reminderData = {
-         userId: currentUser.id,
-        reminder: reminder,
-        reminderDate: reminderDate,
-    };
+    const API = "https://expenses-tracker-ccfm.onrender.com/reminders";
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if(editId == null){
-        $.ajax({
-            url: API,
-            method: "POST",
-            data: JSON.stringify(reminderData),
-            contentType: "application/json",
-            success:function(){
-                Render_UI();
-                $('#reminder').val("");
-                $('#date').val("");
-            }
-        });
-    }else{
+    let editId = null;
 
-    $.ajax({
-        url:`${API}/${editId}`,
-        method:"PUT",
-        contentType:"application/json",
-        data:JSON.stringify({
-            reminder: $("#reminder").val(),
-            reminderDate: $("#date").val()
-        }),
-        success:function(){
-            editId = null;
-            $("button[type='submit']").text("Add Reminder");
-            $("#reminder").val("");
-            $("#date").val("");
-            Render_UI();
+    // ================= ADD / UPDATE ===================
+
+    $("form").submit(function (e) {
+
+        e.preventDefault();
+
+        const reminder = $("#reminder").val().trim();
+        const reminderDate = $("#date").val();
+        const repeat = $("#repeat").val();
+
+        if (reminder == "") {
+            alert("Please Enter Reminder");
+            $("#reminder").focus();
+            return;
         }
+
+        if (reminderDate == "") {
+            alert("Please Select Date");
+            $("#date").focus();
+            return;
+        }
+
+        const reminderData = {
+            userId: currentUser.id,
+            reminder,
+            reminderDate,
+            repeat
+        };
+
+        // ADD
+
+        if (editId == null) {
+
+            $.ajax({
+
+                url: API,
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(reminderData),
+
+                success: function () {
+
+                    $("form")[0].reset();
+                    $("#repeat").val("none");
+
+                    Render_UI();
+
+                }
+
+            });
+
+        }
+
+        // UPDATE
+
+        else {
+
+            $.ajax({
+
+                url: `${API}/${editId}`,
+                method: "PUT",
+                contentType: "application/json",
+
+                data: JSON.stringify(reminderData),
+
+                success: function () {
+
+                    editId = null;
+
+                    $("button[type='submit']").html(`
+                        <i class="bi bi-plus-circle"></i>
+                        Add Reminder
+                    `);
+
+                    $("form")[0].reset();
+                    $("#repeat").val("none");
+
+                    Render_UI();
+
+                }
+
+            });
+
+        }
+
     });
-}
-});
 
-    const Render_UI = () => {
-        $.get(API)
-          .done((res) => {
-            console.log(`🚀 ~ res:`, res);
-            if (res.length && res) {
-              $('#reminderData')
-                .css('display', 'block')
-                .append(function () {
-                  $(this).html(`<table>
-            <thead>
-            <th style="display:none;">ID</th>
-               <th>sr no</th>
-               <th>email</th>
-               <th>password</th>
-               <th>action</th>
-            </thead>
-            <tbody></tbody>
-            </table>`);
 
-                  res.map((el,index) => {
-                    $('tbody').append(`
-<tr>
-    <td style="display:none;">${el.id}</td>
-    <td>${index+1}</td>
-    <td>${el.reminder}</td>
-    <td>${el.reminderDate}</td>
-    <td>
-        <button id="editBtn">Edit</button>
-        <button id="deleteBtn">Delete</button>
-    </td>
-</tr>
-`);
-                  });
-                });
+    // =================== RENDER ======================
+
+    function Render_UI() {
+
+        $.get(API, function (res) {
+
+            const data = res.filter(item => item.userId == currentUser.id);
+
+            if (data.length == 0) {
+
+                $("#reminderData").html("<h3>No Reminder Found</h3>");
+                return;
+
             }
-          })
-          .fail((err) => console.log(err));
-      };
- let editId = null;
-$(document).on("click", "#editBtn", function() {
-    const id = $(this).closest('tr').find('td:first').text();
-    
-    $.ajax({
-        url: `${API}/${id}`,
-        method: 'GET',
-        success: function (data) {
-            console.log('successful', data);
-             editId = id;
+
+            let table = `
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th style="display:none;">ID</th>
+                        <th>Sr No</th>
+                        <th>Reminder</th>
+                        <th>Date</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+            `;
+
+            data.forEach((el, index) => {
+
+                table += `
+
+                <tr>
+
+                    <td style="display:none;">${el.id}</td>
+
+                    <td>${index + 1}</td>
+
+                    <td>${el.reminder}</td>
+
+                    <td>${el.reminderDate}</td>
+
+
+                    <td>
+
+                        <button class="editBtn">
+                            <i class="bi bi-pencil-fill"></i> Edit
+                        </button>
+
+                        <button class="deleteBtn">
+                            <i class="bi bi-trash-fill"></i> Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                `;
+
+            });
+
+            table += `
+
+                </tbody>
+
+            </table>
+
+            `;
+
+            $("#reminderData").html(table);
+
+        });
+
+    }
+
+
+    // ================= EDIT ===================
+
+    $(document).on("click", ".editBtn", function () {
+
+        const id = $(this).closest("tr").find("td:first").text();
+
+        $.get(`${API}/${id}`, function (data) {
+
+            editId = id;
+
             $("#reminder").val(data.reminder);
             $("#date").val(data.reminderDate);
-            $("button[type='submit']").text("Update");
-        },
-    });
-});
+            $("#repeat").val(data.repeat);
 
-     $(document).on('click', '#deleteBtn', function () {
-        const id = $(this).closest('tr').find('td:first').text();
-        $.ajax({
-          url: `${API}/${id}`,
-          method: 'DELETE',
-          success: function (data) {
-            console.log('successful', data);
-            Render_UI();
-          },
-          error: function (err) {
-            console.log('error', err);
-          },
-          complete: function () {
-            console.log('done');
-          },
+            $("button[type='submit']").html(`
+                <i class="bi bi-check-circle"></i>
+                Update Reminder
+            `);
+
         });
-      });
-      Render_UI();
-    })
+
+    });
+
+
+    // ================= DELETE =================
+
+    $(document).on("click", ".deleteBtn", function () {
+
+        if (!confirm("Delete this reminder?")) return;
+
+        const id = $(this).closest("tr").find("td:first").text();
+
+        $.ajax({
+
+            url: `${API}/${id}`,
+            method: "DELETE",
+
+            success: function () {
+
+                Render_UI();
+
+            }
+
+        });
+
+    });
+
+
+    Render_UI();
+
+});
 </script>
 </html>

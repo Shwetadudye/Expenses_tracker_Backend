@@ -1,7 +1,3 @@
-/*==========================
-RESET
-==========================*/
-
 *{
     margin:0;
     padding:0;
@@ -15,19 +11,11 @@ body{
     overflow-x:hidden;
 }
 
-/*==========================
-MAIN
-==========================*/
-
 .main{
     margin-left:250px;
     min-height:100vh;
     padding:30px;
 }
-
-/*==========================
-HEADER
-==========================*/
 
 .header{
     display:flex;
@@ -59,10 +47,6 @@ HEADER
 .exportBtn:hover{
     background:#5b52ec;
 }
-
-/*==========================
-FILTER BAR
-==========================*/
 
 .toolbar{
     display:flex;
@@ -139,10 +123,6 @@ select{
     border-radius:12px;
 }
 
-/*==========================
-TABLE
-==========================*/
-
 .tableContainer{
     background:#171233;
     border-radius:20px;
@@ -178,10 +158,6 @@ tbody tr:hover{
     background:#211a45;
 }
 
-/*==========================
-BADGES
-==========================*/
-
 .incomeTag{
     background:#1db954;
     color:#fff;
@@ -200,10 +176,6 @@ BADGES
     font-weight:600;
 }
 
-/*==========================
-BUTTONS
-==========================*/
-
 .editBtn,
 .deleteBtn{
     width:36px;
@@ -214,6 +186,34 @@ BUTTONS
     color:#fff;
     margin-right:6px;
     transition:.3s;
+}
+
+.incomeAmount{
+    color:#22c55e;
+    font-weight:700;
+    font-size:15px;
+}
+
+.expenseAmount{
+    color:#ef4444;
+    font-weight:700;
+    font-size:15px;
+}
+
+.modalContent{
+
+    width:420px;
+
+    background:#171233;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 40px rgba(0,0,0,0.5);
+
+    color:white;
+
 }
 
 .editBtn{
@@ -232,10 +232,6 @@ BUTTONS
     background:#c0392b;
 }
 
-/*==========================
-EMPTY
-==========================*/
-
 #empty{
     display:none;
     text-align:center;
@@ -251,10 +247,6 @@ EMPTY
 #empty h3{
     color:#aaa;
 }
-
-/*==========================
-PAGINATION
-==========================*/
 
 .pagination{
     display:flex;
@@ -284,10 +276,6 @@ PAGINATION
     font-weight:600;
 }
 
-/*==========================
-MODAL
-==========================*/
-
 .modal{
     display:none;
     position:fixed;
@@ -299,27 +287,205 @@ MODAL
 }
 
 .modalContent{
-    width:500px;
+    width:750px;
+    max-height:90vh;
+    overflow-y:auto;
     background:#171233;
-    border-radius:20px;
-    padding:30px;
+    border-radius:24px;
+    padding:35px;
 }
 
 .modalContent h2{
     margin-bottom:25px;
 }
 
+.modal.show{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.modalContent label{
+
+    display:block;
+    margin-bottom:8px;
+    margin-top:18px;
+    font-weight:600;
+    color:#fff;
+
+}
 .modalContent input,
-.modalContent textarea,
-.modalContent select{
+.modalContent textarea{
+
     width:100%;
     background:#241c4d;
-    color:#fff;
     border:none;
+    color:white;
+    padding:15px;
+    border-radius:14px;
     outline:none;
-    padding:14px;
-    border-radius:10px;
-    margin-bottom:15px;
+    margin-bottom:8px;
+    font-size:15px;
+
+}
+
+#modalTitle{
+
+    font-size:30px;
+    margin-bottom:5px;
+
+}
+.icon{
+
+    background:#2a2354;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    border:2px solid transparent;
+
+}
+.icon:hover{
+
+    transform:translateY(-3px);
+
+    border-color:#6c63ff;
+
+}
+.icon.selected{
+
+    border-color:#6c63ff;
+
+    background:#3b3374;
+
+}
+
+.icon i{
+
+    font-size:20px;
+
+}
+.green i{
+    color:#22c55e;
+}
+
+.blue i{
+    color:#3b82f6;
+}
+
+.orange i{
+    color:#fb923c;
+}
+
+.purple i{
+    color:#c084fc;
+}
+
+.sky i{
+    color:#38bdf8;
+}
+
+.account{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+    margin-top:12px;
+
+}
+.back-btn{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#241d49;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:#6C63FF;
+}
+
+.back-btn i{
+    font-size:20px;
+}
+
+.account-card{
+
+    background:#2a2354;
+
+    border:2px solid transparent;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.account-card:hover{
+
+    border-color:#6c63ff;
+
+}
+.account-card.active{
+
+    border-color:#6c63ff;
+
+    background:#3a3272;
+
+}
+
+.account-card i{
+
+    font-size:28px;
+
+    color:#facc15;
+
+    margin-bottom:10px;
+
+}
+
+#categoryContainer{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+
+    margin-top:10px;
+
+}
+
+#modalSubTitle{
+
+    color:#9ca3af;
+    margin-bottom:25px;
+    font-size:15px;
+
 }
 
 .modalContent textarea{
@@ -328,10 +494,15 @@ MODAL
 }
 
 .modalBtns{
+
     display:flex;
+
     justify-content:flex-end;
+
     gap:15px;
-    margin-top:20px;
+
+    margin-top:30px;
+
 }
 
 .modalBtns button{
@@ -351,19 +522,6 @@ MODAL
     background:#6c63ff;
 }
 
-/*==========================
-CHECKBOX
-==========================*/
-
-input[type="checkbox"]{
-    width:18px;
-    height:18px;
-    cursor:pointer;
-}
-
-/*==========================
-SCROLLBAR
-==========================*/
 
 ::-webkit-scrollbar{
     width:8px;
@@ -414,4 +572,28 @@ RESPONSIVE
     table{
         min-width:1000px;
     }
+}
+
+@media(max-width:768px){
+
+.modalContent{
+
+    width:95%;
+
+    padding:20px;
+
+}
+
+.account{
+
+    grid-template-columns:1fr;
+
+}
+
+#categoryContainer{
+
+    grid-template-columns:1fr;
+
+}
+
 }

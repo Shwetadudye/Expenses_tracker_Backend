@@ -18,15 +18,8 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 </head>
 
 <body>
-
-<!-- Sidebar -->
 <div id="sidebar"></div>
-
-<!-- Main -->
 <div class="main">
-
-    <!-- Heading -->
-
     <div class="header">
 
         <div>
@@ -34,14 +27,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
             <p>Manage all your income and expenses</p>
         </div>
 
-        <button class="exportBtn">
-            <i class="fa-solid fa-download"></i>
-            Export
-        </button>
-
     </div>
-
-    <!-- Filters -->
 
     <div class="toolbar">
 
@@ -88,8 +74,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     </div>
 
-    <!-- Table -->
-
     <div class="tableContainer">
 
         <table>
@@ -97,9 +81,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
             <thead>
 
                 <tr>
-
-                    <th><input type="checkbox"></th>
-
                     <th>Date</th>
 
                     <th>Title</th>
@@ -122,14 +103,9 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
             <tbody id="tbody">
 
-                <!-- Render Using JQuery -->
-
             </tbody>
 
         </table>
-
-        <!-- Empty -->
-
         <div id="empty">
 
             <i class="fa-regular fa-folder-open"></i>
@@ -139,9 +115,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
         </div>
 
     </div>
-
-    <!-- Pagination -->
-
     <div class="pagination">
 
         <button id="prev">
@@ -163,50 +136,56 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 <div class="modal" id="editModal">
 
     <div class="modalContent">
+        <div class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i>
+        </div>
 
-        <h2>Edit Transaction</h2>
+        <h2 id="modalTitle">Edit Transaction</h2>
+<p id="modalSubTitle"></p>
 
         <form id="editForm">
+            <label id="titleLabel">Title</label>
+<input type="text" id="title">
 
-            <input
-            type="text"
-            id="title"
-            placeholder="Title"
-            required>
+          <label>Amount</label>
+<input type="number" id="amount">
 
-            <input
-            type="number"
-            id="amount"
-            placeholder="Amount"
-            required>
+<label>Date</label>
+<input type="date" id="date">
 
-            <input
-            type="date"
-            id="date"
-            required>
+<label>Note</label>
+<textarea id="remarks"></textarea>
 
-            <input
-            type="text"
-            id="category"
-            placeholder="Category">
+           <label id="categoryLabel">Category</label>
 
-            <input
-            type="text"
-            id="account"
-            placeholder="Account">
+<div id="categoryContainer"></div>
 
-            <textarea
-            id="remarks"
-            placeholder="Remarks">
-            </textarea>
+<input type="hidden" id="category">
 
-            <select id="type">
+           <label id="accountLabel">Account</label>
 
-                <option value="income">Income</option>
+<div class="account">
 
-                <option value="expense">Expense</option>
+<div class="account-card" data-value="Cash">
 
-            </select>
+<i class="fa-solid fa-wallet"></i>
+
+<h4>Cash</h4>
+
+</div>
+
+<div class="account-card" data-value="Bank">
+
+<i class="fa-solid fa-building-columns"></i>
+
+<h4>Bank</h4>
+
+</div>
+
+</div>
+
+<input type="hidden" id="account">
+
 
             <div class="modalBtns">
 
@@ -233,15 +212,10 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 </div>
 
-<script src="../Js/Transactions.js"></script>
+
 
 </body>
 <script>
-    //==============================
-// API
-//==============================
-
-const API =`https://expenses-tracker-ccfm.onrender.com/transactions`; 
 
 const incomeAPI = "https://expenses-tracker-ccfm.onrender.com/income";
 const expenseAPI = "https://expenses-tracker-ccfm.onrender.com/expenses";
@@ -269,10 +243,139 @@ $("#sidebar").load("../Components/Sidebar.html", function () {
     $("#transaction").click(() => location.href = "Transactions.html");
     $("#reminderPage").click(() => location.href = "Reminder.html");
 
+    $("#logout").click(function () {
+
+        localStorage.removeItem("loggedInUser");
+        location.href = "Login.html";
+
+    });
+
+});
+$(".fa-arrow-left").click(function(){
+        history.back();
+    });
+
+$(".account-card").click(function(){
+
+    $(".account-card").removeClass("active");
+
+$(`.account-card[data-value="${item.account}"]`)
+.addClass("active");
+
+    $(this).addClass("active");
+
+    $("#account").val($(this).data("value"));
+
 });
 
+const incomeCategory = [
+
+{
+name:"Salary",
+icon:"fa-briefcase",
+color:"green"
+},
+
+{
+name:"Freelance",
+icon:"fa-laptop-code",
+color:"blue"
+},
+
+{
+name:"Investment",
+icon:"fa-chart-line",
+color:"sky"
+},
+
+{
+name:"Gift",
+icon:"fa-gift",
+color:"purple"
+},
+
+{
+name:"Bonus",
+icon:"fa-coins",
+color:"orange"
+}
+
+];
+
+const expenseCategory=[
+
+{
+name:"Food",
+icon:"fa-utensils",
+color:"orange"
+},
+
+{
+name:"Travel",
+icon:"fa-plane",
+color:"sky"
+},
+
+{
+name:"Shopping",
+icon:"fa-bag-shopping",
+color:"purple"
+},
+
+{
+name:"Health",
+icon:"fa-notes-medical",
+color:"blue"
+},
+
+{
+name:"Bills",
+icon:"fa-file-invoice-dollar",
+color:"green"
+}
+
+];
+
+function renderCategory(type){
+
+let data = type==="Income"
+? incomeCategory
+: expenseCategory;
+
+$("#categoryContainer").empty();
+
+data.forEach(item=>{
+
+$("#categoryContainer").append(`
+
+<div class="icon ${item.color}"
+data-value="${item.name}">
+
+<i class="fa-solid ${item.icon}"></i>
+
+<span>${item.name}</span>
+
+</div>
+
+`);
+
+});
+
+}
+
+$(document).on("click",".icon",function(){
+$(".icon").removeClass("selected");
+
+$(`.icon[data-value="${item.category}"]`)
+.addClass("selected");
+
+$(this).addClass("selected");
+
+$("#category").val($(this).data("value"));
+
+});
 //==============================
-// Load Data
+// Load Transactions
 //==============================
 
 function loadTransactions() {
@@ -288,16 +391,16 @@ function loadTransactions() {
         let expense = expenseRes[0];
 
         income = income
-            .filter(x => x.userId == currentUser.id)
-            .map(x => ({
-                ...x,
+            .filter(item => item.userId == currentUser.id)
+            .map(item => ({
+                ...item,
                 type: "Income"
             }));
 
         expense = expense
-            .filter(x => x.userId == currentUser.id)
-            .map(x => ({
-                ...x,
+            .filter(item => item.userId == currentUser.id)
+            .map(item => ({
+                ...item,
                 type: "Expense"
             }));
 
@@ -306,6 +409,8 @@ function loadTransactions() {
         transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         filteredData = [...transactions];
+
+        currentPage = 1;
 
         renderTable();
 
@@ -316,7 +421,7 @@ function loadTransactions() {
 loadTransactions();
 
 //==============================
-// Render
+// Render Table
 //==============================
 
 function renderTable() {
@@ -324,15 +429,13 @@ function renderTable() {
     $("#tbody").empty();
 
     const start = (currentPage - 1) * rowsPerPage;
-
     const end = start + rowsPerPage;
 
     const pageData = filteredData.slice(start, end);
 
-    if (pageData.length == 0) {
+    if (pageData.length === 0) {
 
         $("#empty").show();
-
         return;
 
     }
@@ -341,17 +444,15 @@ function renderTable() {
 
     pageData.forEach(item => {
 
-        let badge = item.type == "Income"
-            ? "<span class='incomeTag'>Income</span>"
-            : "<span class='expenseTag'>Expense</span>";
+        const badge = item.type === "Income"
+
+            ? `<span class="incomeTag">Income</span>`
+
+            : `<span class="expenseTag">Expense</span>`;
 
         $("#tbody").append(`
 
 <tr>
-
-<td>
-<input type="checkbox">
-</td>
 
 <td>${item.date}</td>
 
@@ -362,10 +463,11 @@ function renderTable() {
 <td>${badge}</td>
 
 <td>${item.account}</td>
+<td class="${item.type === 'Income' ? 'incomeAmount' : 'expenseAmount'}">
+    ₹${Number(item.amount).toLocaleString("en-IN")}
+</td>
 
-<td>₹${Number(item.amount).toLocaleString("en-IN")}</td>
-
-<td>${item.remarks || "-"}</td>
+<td>${item.note || item.remarks || "-"}</td>
 
 <td>
 
@@ -396,24 +498,27 @@ data-type="${item.type}">
     $("#pageNo").text(currentPage);
 
 }
-
 //==============================
 // Search
 //==============================
 
 $("#search").on("keyup", function () {
 
-    let value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase().trim();
 
-    filteredData = transactions.filter(item =>
+    filteredData = transactions.filter(item => {
 
-        item.title.toLowerCase().includes(value) ||
+        return (
 
-        item.category.toLowerCase().includes(value) ||
+            item.title.toLowerCase().includes(value) ||
 
-        item.account.toLowerCase().includes(value)
+            item.category.toLowerCase().includes(value) ||
 
-    );
+            item.account.toLowerCase().includes(value)
+
+        );
+
+    });
 
     currentPage = 1;
 
@@ -429,13 +534,13 @@ $("#dateFilter").change(function () {
 
     let date = $(this).val();
 
-    if (date == "") {
+    if (date === "") {
 
         filteredData = [...transactions];
 
     } else {
 
-        filteredData = transactions.filter(x => x.date == date);
+        filteredData = transactions.filter(item => item.date === date);
 
     }
 
@@ -457,6 +562,8 @@ $("#allBtn").click(function () {
 
     filteredData = [...transactions];
 
+    currentPage = 1;
+
     renderTable();
 
 });
@@ -467,7 +574,9 @@ $("#incomeBtn").click(function () {
 
     $(this).addClass("active");
 
-    filteredData = transactions.filter(x => x.type == "Income");
+    filteredData = transactions.filter(item => item.type === "Income");
+
+    currentPage = 1;
 
     renderTable();
 
@@ -479,7 +588,9 @@ $("#expenseBtn").click(function () {
 
     $(this).addClass("active");
 
-    filteredData = transactions.filter(x => x.type == "Expense");
+    filteredData = transactions.filter(item => item.type === "Expense");
+
+    currentPage = 1;
 
     renderTable();
 
@@ -491,31 +602,37 @@ $("#expenseBtn").click(function () {
 
 $("#sort").change(function () {
 
-    let value = $(this).val();
+    let sortValue = $(this).val();
 
-    if (value == "latest") {
+    switch (sortValue) {
 
-        filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        case "latest":
+
+            filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            break;
+
+        case "oldest":
+
+            filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            break;
+
+        case "high":
+
+            filteredData.sort((a, b) => Number(b.amount) - Number(a.amount));
+
+            break;
+
+        case "low":
+
+            filteredData.sort((a, b) => Number(a.amount) - Number(b.amount));
+
+            break;
 
     }
 
-    if (value == "oldest") {
-
-        filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    }
-
-    if (value == "high") {
-
-        filteredData.sort((a, b) => b.amount - a.amount);
-
-    }
-
-    if (value == "low") {
-
-        filteredData.sort((a, b) => a.amount - b.amount);
-
-    }
+    currentPage = 1;
 
     renderTable();
 
@@ -548,28 +665,43 @@ $("#prev").click(function () {
     }
 
 });
-
 //==============================
 // Delete
 //==============================
 
+$(document).off("click", ".deleteBtn");
+
 $(document).on("click", ".deleteBtn", function () {
 
-   const id = $(this).closest('tr').find('td:first').text();
+    let id = $(this).data("id");
+    let type = $(this).data("type");
 
     if (!confirm("Delete Transaction?")) return;
 
-    let api = type == "Income" ? incomeAPI : expenseAPI;
+    let api = (type === "Income") ? incomeAPI : expenseAPI;
 
     $.ajax({
 
-        url: `${API}/${id}`,
-
+        url: `${api}/${id}`,
         method: "DELETE",
 
         success: function () {
 
-            loadTransactions();
+            transactions = transactions.filter(item =>
+                !(item.id == id && item.type == type)
+            );
+
+            filteredData = filteredData.filter(item =>
+                !(item.id == id && item.type == type)
+            );
+
+            renderTable();
+
+        },
+
+        error: function (err) {
+
+            console.log(err);
 
         }
 
@@ -581,23 +713,61 @@ $(document).on("click", ".deleteBtn", function () {
 // Open Edit
 //==============================
 
-$(document).on("click", ".editBtn", function () {
+$(document).off("click", ".editBtn");
 
-    editId = $(this).data("id");
+$(document).on("click",".editBtn",function(){
 
-    editType = $(this).data("type");
+    editId=$(this).data("id");
+    editType=$(this).data("type");
 
-    let item = transactions.find(x => x.id == editId && x.type == editType);
+    let item=transactions.find(x=>
+        x.id==editId &&
+        x.type==editType
+    );
+
+    if(!item) return;
+
+    if(editType=="Income"){
+
+        $("#modalTitle").text("Edit Income");
+        $("#modalSubTitle").text("Update your income details");
+        $("#titleLabel").text("Income Title");
+        $("#accountLabel").text("Source Account");
+        $("#categoryLabel").text("Income Category");
+
+        renderCategory("Income");
+
+    }
+    else{
+
+        $("#modalTitle").text("Edit Expense");
+        $("#modalSubTitle").text("Update your expense details");
+        $("#titleLabel").text("Expense Title");
+        $("#accountLabel").text("Select Account");
+        $("#categoryLabel").text("Expense Category");
+
+        renderCategory("Expense");
+
+    }
 
     $("#title").val(item.title);
     $("#amount").val(item.amount);
     $("#date").val(item.date);
-    $("#category").val(item.category);
-    $("#account").val(item.account);
-    $("#remarks").val(item.remarks);
-    $("#type").val(item.type.toLowerCase());
+    $("#remarks").val(item.note || "");
 
-    $("#editModal").fadeIn();
+    $("#category").val(item.category);
+
+    $(".icon").removeClass("selected");
+
+    $(`.icon[data-value="${item.category}"]`).addClass("selected");
+
+    $("#account").val(item.account);
+
+    $(".account-card").removeClass("active");
+
+    $(`.account-card[data-value="${item.account}"]`).addClass("active");
+
+    $("#editModal").addClass("show");
 
 });
 
@@ -607,7 +777,7 @@ $(document).on("click", ".editBtn", function () {
 
 $("#cancel").click(function () {
 
-    $("#editModal").fadeOut();
+    $("#editModal").removeClass("show");
 
 });
 
@@ -619,10 +789,9 @@ $("#editForm").submit(function (e) {
 
     e.preventDefault();
 
-    if ($("#title").val().trim() == "") {
+    if ($("#title").val().trim() === "") {
 
         alert("Title Required");
-
         return;
 
     }
@@ -630,48 +799,42 @@ $("#editForm").submit(function (e) {
     if ($("#amount").val() <= 0) {
 
         alert("Invalid Amount");
-
         return;
 
     }
 
     let obj = {
 
-        title: $("#title").val(),
-
+        title: $("#title").val().trim(),
         amount: Number($("#amount").val()),
-
         date: $("#date").val(),
-
-        category: $("#category").val(),
-
-        account: $("#account").val(),
-
-        remarks: $("#remarks").val(),
-
+        category: $("#category").val().trim(),
+        account: $("#account").val().trim(),
+        note: $("#remarks").val().trim(),
         userId: currentUser.id
 
     };
 
-    let api = editType == "Income"
-        ? incomeAPI
-        : expenseAPI;
+    let api = (editType === "Income") ? incomeAPI : expenseAPI;
 
     $.ajax({
 
         url: `${api}/${editId}`,
-
         method: "PUT",
-
         contentType: "application/json",
-
         data: JSON.stringify(obj),
 
         success: function () {
 
-            $("#editModal").fadeOut();
+            $("#editModal").removeClass("show");
 
             loadTransactions();
+
+        },
+
+        error: function (err) {
+
+            console.log(err);
 
         }
 
@@ -683,28 +846,31 @@ $("#editForm").submit(function (e) {
 // Export CSV
 //==============================
 
-$(".exportBtn").click(function () {
+// $(".exportBtn").click(function () {
 
-    let csv = "Date,Title,Category,Type,Account,Amount,Remarks\n";
+//     let csv =
+//         "Date,Title,Category,Type,Account,Amount,Remarks\n";
 
-    filteredData.forEach(item => {
+//     filteredData.forEach(item => {
 
-        csv += `${item.date},${item.title},${item.category},${item.type},${item.account},${item.amount},${item.remarks}\n`;
+//         csv += `${item.date},${item.title},${item.category},${item.type},${item.account},${item.amount},"${item.note || item.remarks || ""}"\n`;
 
-    });
+//     });
 
-    let blob = new Blob([csv], {
-        type: "text/csv"
-    });
+//     let blob = new Blob([csv], {
 
-    let link = document.createElement("a");
+//         type: "text/csv"
 
-    link.href = URL.createObjectURL(blob);
+//     });
 
-    link.download = "Transactions.csv";
+//     let link = document.createElement("a");
 
-    link.click();
+//     link.href = URL.createObjectURL(blob);
 
-});
+//     link.download = "Transactions.csv";
+
+//     link.click();
+
+// });
 </script>
 </html>

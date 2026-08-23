@@ -69,6 +69,7 @@
                 }
                 localStorage.setItem("userId", user.id);
                 localStorage.setItem("loggedInUser", JSON.stringify(user));
+                console.log("Logged User", JSON.parse(localStorage.getItem("loggedInUser")));
                 alert("LOGIN SUCCESSFULLY");
                 window.location.href="Home.html";
               },
