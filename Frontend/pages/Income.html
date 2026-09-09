@@ -120,7 +120,7 @@
 $(document).ready(function(){
    $("#sidebar").load("../Components/Sidebar.html", function(response,status){
         if(status === "success"){
-            $("#dash").click(()=>location.href="Home.html");
+            $("#dash").click(()=>location.href="../index.html");
             $("#income").click(()=>location.href="Income.html");
             $("#expense").click(()=>location.href="Expenses.html");
             $("#transaction").click(()=>location.href="Transactions.html");
@@ -194,7 +194,7 @@ $(document).ready(function(){
             data:JSON.stringify(income),
             success:function(){
                 alert("Income Added Successfully ✅");
-                location.href="Home.html";
+                location.href="../index.html";
             },
             error:function(){
                 alert("Failed to Add Income");

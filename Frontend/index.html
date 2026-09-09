@@ -6,8 +6,10 @@
 
     <title>Expense Tracker Dashboard</title>
 
-    <link rel="stylesheet" href="../Frontend/Components/SideBar.css">
+    <!-- SIDEBAR CSS -->
+    <link rel="stylesheet" href="Components/SideBar.css">
 
+    <!-- BOOTSTRAP -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -15,20 +17,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- BOOTSTRAP ICONS -->
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
+    <!-- GOOGLE FONT -->
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="../Frontend/Css/Style.css">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="Css/Style.css">
 
+    <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- JQUERY -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 </head>
@@ -82,17 +89,14 @@
                         class="btn-close calc-close"
                         data-bs-dismiss="modal"
                         aria-label="Close"
-                    >
-                        <i class="bi bi-x-lg"></i>
-                    </button>
+                    ></button>
 
                     <div class="modal-body p-0">
 
                         <iframe
-                            src="Calculator.html"
+                            src="pages/Calculator.html"
                             style="width:100%; height:650px; border:none;"
-                        >
-                        </iframe>
+                        ></iframe>
 
                     </div>
 
@@ -282,19 +286,12 @@
                     <tr>
 
                         <th>Date</th>
-
                         <th>Title</th>
-
                         <th>Category</th>
-
                         <th>Type</th>
-
                         <th>Account</th>
-
                         <th>Amount</th>
-
                         <th>Remarks</th>
-
                         <th>Action</th>
 
                     </tr>
@@ -302,9 +299,7 @@
                 </thead>
 
 
-                <tbody id="recentTransactions">
-
-                </tbody>
+                <tbody id="recentTransactions"></tbody>
 
             </table>
 
@@ -324,53 +319,64 @@ $(document).ready(function () {
     ========================================= */
 
     $("#sidebar").load(
-        "../Components/Sidebar.html",
-        function(response, status){
+        "Components/Sidebar.html",
+        function(response, status) {
 
-            if(status === "success"){
-
-                $("#dash").click(function(){
-
-                    location.href = "Home.html";
-
-                });
+            if (status === "success") {
 
 
-                $("#income").click(function(){
+                /* DASHBOARD */
 
-                    location.href = "Income.html";
+                $("#dash").click(function() {
+
+                    location.href = "index.html";
 
                 });
 
 
-                $("#expense").click(function(){
+                /* INCOME */
 
-                    location.href = "Expenses.html";
+                $("#income").click(function() {
 
-                });
-
-
-                $("#transaction").click(function(){
-
-                    location.href = "Transactions.html";
+                    location.href = "pages/Income.html";
 
                 });
 
 
-                $("#reminderPage").click(function(){
+                /* EXPENSE */
 
-                    location.href = "Reminder.html";
+                $("#expense").click(function() {
+
+                    location.href = "pages/Expenses.html";
+
+                });
+
+
+                /* TRANSACTIONS */
+
+                $("#transaction").click(function() {
+
+                    location.href = "pages/Transactions.html";
+
+                });
+
+
+                /* REMINDER */
+
+                $("#reminderPage").click(function() {
+
+                    location.href = "pages/Reminder.html";
 
                 });
 
 
                 /* LOGOUT */
 
-                $("#logout").click(function(){
+                $("#logout").click(function() {
 
                     localStorage.removeItem("loggedInUser");
 
-                    location.href = "login.html";
+                    location.href = "pages/Login.html";
 
                 });
 
@@ -385,9 +391,9 @@ $(document).ready(function () {
        RECENT TRANSACTIONS CLICK
     ========================================= */
 
-    $("#recentTransactionCard").click(function(){
+    $("#recentTransactionCard").click(function() {
 
-        window.location.href = "Transactions.html";
+        window.location.href = "pages/Transactions.html";
 
     });
 
@@ -397,7 +403,7 @@ $(document).ready(function () {
        CALCULATOR
     ========================================= */
 
-    $("#add-btn").click(function(){
+    $("#add-btn").click(function() {
 
         let modal = new bootstrap.Modal(
             document.getElementById("calcModal")
@@ -408,9 +414,10 @@ $(document).ready(function () {
     });
 
 
-    $("#calcModal").click(function(e){
 
-        if(e.target === this){
+    $("#calcModal").click(function(e) {
+
+        if (e.target === this) {
 
             $(this).fadeOut(200);
 
@@ -421,19 +428,24 @@ $(document).ready(function () {
 
 
     /* =========================================
-       INCOME / EXPENSE BUTTONS
+       INCOME BUTTON
     ========================================= */
 
-    $("#income-btn").click(function(){
+    $("#income-btn").click(function() {
 
-        window.location.href = "Income.html";
+        window.location.href = "pages/Income.html";
 
     });
 
 
-    $("#expense-btn").click(function(){
 
-        window.location.href = "Expenses.html";
+    /* =========================================
+       EXPENSE BUTTON
+    ========================================= */
+
+    $("#expense-btn").click(function() {
+
+        window.location.href = "pages/Expenses.html";
 
     });
 
@@ -444,16 +456,19 @@ $(document).ready(function () {
     ========================================= */
 
     const currentUser =
-        JSON.parse(localStorage.getItem("loggedInUser"));
+        JSON.parse(
+            localStorage.getItem("loggedInUser")
+        );
+
 
 
     /* =========================================
        IF USER NOT LOGGED IN
     ========================================= */
 
-    if(!currentUser){
+    if (!currentUser) {
 
-        window.location.href = "login.html";
+        window.location.href = "pages/Login.html";
 
         return;
 
@@ -470,7 +485,7 @@ $(document).ready(function () {
 
 
     /* =========================================
-       GET DATA
+       GET DATA FROM API
     ========================================= */
 
     $.when(
@@ -496,7 +511,7 @@ $(document).ready(function () {
         expenseRes,
         budgetRes,
         reminderRes
-    ){
+    ) {
 
 
         /* =========================================
@@ -543,13 +558,13 @@ $(document).ready(function () {
 
 
         recent.sort(
-            (a,b) =>
+            (a, b) =>
                 new Date(b.date) -
                 new Date(a.date)
         );
 
 
-        recent.slice(0,4).forEach(function(item){
+        recent.slice(0, 4).forEach(function(item) {
 
 
             $("#recentTransactions").append(`
@@ -560,23 +575,20 @@ $(document).ready(function () {
                         ${item.date}
                     </td>
 
-
                     <td>
                         ${item.title}
                     </td>
-
 
                     <td>
                         ${item.category || "-"}
                     </td>
 
-
                     <td>
 
                         <span class="${
-                            item.type == "Income"
-                            ? "incomeTag"
-                            : "expenseTag"
+                            item.type === "Income"
+                                ? "incomeTag"
+                                : "expenseTag"
                         }">
 
                             ${item.type}
@@ -585,34 +597,31 @@ $(document).ready(function () {
 
                     </td>
 
-
                     <td>
                         ${item.account || "-"}
                     </td>
-
 
                     <td
                         style="
                             font-weight:600;
                             color:${
-                                item.type == "Income"
-                                ? "#22c55e"
-                                : "#ef4444"
+                                item.type === "Income"
+                                    ? "#22c55e"
+                                    : "#ef4444"
                             }
                         "
                     >
 
                         ${
-                            item.type == "Income"
-                            ? "+"
-                            : "-"
+                            item.type === "Income"
+                                ? "+"
+                                : "-"
                         }
 
                         ₹${Number(item.amount)
                             .toLocaleString("en-IN")}
 
                     </td>
-
 
                     <td>
                         ${
@@ -621,7 +630,6 @@ $(document).ready(function () {
                             "-"
                         }
                     </td>
-
 
                     <td>
 
@@ -665,14 +673,14 @@ $(document).ready(function () {
         let totalExpense = 0;
 
 
-        income.forEach(function(i){
+        income.forEach(function(i) {
 
             totalIncome += Number(i.amount);
 
         });
 
 
-        expenses.forEach(function(i){
+        expenses.forEach(function(i) {
 
             totalExpense += Number(i.amount);
 
@@ -681,12 +689,14 @@ $(document).ready(function () {
 
 
         $("#totalIncome").text(
-            "₹" + totalIncome.toLocaleString("en-IN")
+            "₹" +
+            totalIncome.toLocaleString("en-IN")
         );
 
 
         $("#totalExpense").text(
-            "₹" + totalExpense.toLocaleString("en-IN")
+            "₹" +
+            totalExpense.toLocaleString("en-IN")
         );
 
 
@@ -699,7 +709,7 @@ $(document).ready(function () {
             totalIncome - totalExpense;
 
 
-        if(totalBalance < 0){
+        if (totalBalance < 0) {
 
             totalBalance = 0;
 
@@ -725,7 +735,7 @@ $(document).ready(function () {
         let spendRate = 0;
 
 
-        if(totalIncome > 0){
+        if (totalIncome > 0) {
 
             spendRate =
                 (totalExpense / totalIncome) * 100;
@@ -733,7 +743,7 @@ $(document).ready(function () {
         }
 
 
-        if(spendRate > 100){
+        if (spendRate > 100) {
 
             spendRate = 100;
 
@@ -764,36 +774,36 @@ $(document).ready(function () {
 
         let months = {
 
-            Jan:0,
-            Feb:0,
-            Mar:0,
-            Apr:0,
-            May:0,
-            Jun:0,
-            Jul:0,
-            Aug:0,
-            Sep:0,
-            Oct:0,
-            Nov:0,
-            Dec:0
+            Jan: 0,
+            Feb: 0,
+            Mar: 0,
+            Apr: 0,
+            May: 0,
+            Jun: 0,
+            Jul: 0,
+            Aug: 0,
+            Sep: 0,
+            Oct: 0,
+            Nov: 0,
+            Dec: 0
 
         };
 
 
         let expenseMonths = {
 
-            Jan:0,
-            Feb:0,
-            Mar:0,
-            Apr:0,
-            May:0,
-            Jun:0,
-            Jul:0,
-            Aug:0,
-            Sep:0,
-            Oct:0,
-            Nov:0,
-            Dec:0
+            Jan: 0,
+            Feb: 0,
+            Mar: 0,
+            Apr: 0,
+            May: 0,
+            Jun: 0,
+            Jul: 0,
+            Aug: 0,
+            Sep: 0,
+            Oct: 0,
+            Nov: 0,
+            Dec: 0
 
         };
 
@@ -803,19 +813,23 @@ $(document).ready(function () {
            INCOME MONTHS
         ========================================= */
 
-        income.forEach(function(item){
+        income.forEach(function(item) {
 
             let m =
                 new Date(item.date)
                 .toLocaleString(
                     "default",
                     {
-                        month:"short"
+                        month: "short"
                     }
                 );
 
 
-            months[m] += Number(item.amount);
+            if (months[m] !== undefined) {
+
+                months[m] += Number(item.amount);
+
+            }
 
         });
 
@@ -825,19 +839,23 @@ $(document).ready(function () {
            EXPENSE MONTHS
         ========================================= */
 
-        expenses.forEach(function(item){
+        expenses.forEach(function(item) {
 
             let m =
                 new Date(item.date)
                 .toLocaleString(
                     "default",
                     {
-                        month:"short"
+                        month: "short"
                     }
                 );
 
 
-            expenseMonths[m] += Number(item.amount);
+            if (expenseMonths[m] !== undefined) {
+
+                expenseMonths[m] += Number(item.amount);
+
+            }
 
         });
 
@@ -851,38 +869,38 @@ $(document).ready(function () {
             $("#financeChart"),
             {
 
-                type:"line",
+                type: "line",
 
-                data:{
+                data: {
 
-                    labels:Object.keys(months),
+                    labels: Object.keys(months),
 
-                    datasets:[
+                    datasets: [
 
                         {
 
-                            label:"Income",
+                            label: "Income",
 
                             data:
                                 Object.values(months),
 
-                            borderColor:"#22c55e",
+                            borderColor: "#22c55e",
 
-                            tension:.4
+                            tension: .4
 
                         },
 
 
                         {
 
-                            label:"Expense",
+                            label: "Expense",
 
                             data:
                                 Object.values(expenseMonths),
 
-                            borderColor:"#ef4444",
+                            borderColor: "#ef4444",
 
-                            tension:.4
+                            tension: .4
 
                         }
 
@@ -903,23 +921,23 @@ $(document).ready(function () {
             $("#expenseBarChart"),
             {
 
-                type:"bar",
+                type: "bar",
 
-                data:{
+                data: {
 
                     labels:
                         Object.keys(expenseMonths),
 
-                    datasets:[
+                    datasets: [
 
                         {
 
-                            label:"Expense",
+                            label: "Expense",
 
                             data:
                                 Object.values(expenseMonths),
 
-                            backgroundColor:"#6C63FF"
+                            backgroundColor: "#6C63FF"
 
                         }
 
@@ -939,7 +957,7 @@ $(document).ready(function () {
         let categoryData = {};
 
 
-        expenses.forEach(function(item){
+        expenses.forEach(function(item) {
 
             let cat =
                 item.category || "Other";
@@ -961,14 +979,14 @@ $(document).ready(function () {
             $("#expensePieChart"),
             {
 
-                type:"doughnut",
+                type: "doughnut",
 
-                data:{
+                data: {
 
                     labels:
                         Object.keys(categoryData),
 
-                    datasets:[
+                    datasets: [
 
                         {
 
@@ -1030,23 +1048,23 @@ $(document).ready(function () {
            LOAD REMINDERS
         ========================================= */
 
-        function loadReminders(){
+        function loadReminders() {
 
             $("#reminderList").empty();
 
 
             let today = new Date();
 
-            today.setHours(0,0,0,0);
+            today.setHours(0, 0, 0, 0);
 
 
             let reminders =
-                data.filter(function(item){
+                data.filter(function(item) {
 
                     let d =
                         new Date(item.reminderDate);
 
-                    d.setHours(0,0,0,0);
+                    d.setHours(0, 0, 0, 0);
 
 
                     return (
@@ -1065,14 +1083,14 @@ $(document).ready(function () {
 
 
             reminders.sort(
-                (a,b) =>
+                (a, b) =>
                     new Date(a.reminderDate) -
                     new Date(b.reminderDate)
             );
 
 
 
-            if(reminders.length === 0){
+            if (reminders.length === 0) {
 
                 $("#reminderList").html(
                     "<p>No Reminder</p>"
@@ -1084,7 +1102,7 @@ $(document).ready(function () {
 
 
 
-            reminders.forEach(function(item){
+            reminders.forEach(function(item) {
 
                 $("#reminderList").append(`
 
@@ -1092,13 +1110,11 @@ $(document).ready(function () {
 
                         <i class="bi bi-bell-fill"></i>
 
-
                         <div class="reminder-content">
 
                             <h6>
                                 ${item.reminder}
                             </h6>
-
 
                             <small>
                                 ${item.reminderDate}
@@ -1120,7 +1136,7 @@ $(document).ready(function () {
            LOAD UPCOMING
         ========================================= */
 
-        function loadUpcoming(){
+        function loadUpcoming() {
 
             $("#upcomingList").empty();
 
@@ -1147,7 +1163,7 @@ $(document).ready(function () {
                 currentYear;
 
 
-            if(nextMonth > 11){
+            if (nextMonth > 11) {
 
                 nextMonth = 0;
 
@@ -1158,7 +1174,7 @@ $(document).ready(function () {
 
 
             let upcoming =
-                data.filter(function(item){
+                data.filter(function(item) {
 
                     let d =
                         new Date(item.reminderDate);
@@ -1185,7 +1201,7 @@ $(document).ready(function () {
 
 
 
-            upcoming.sort(function(a,b){
+            upcoming.sort(function(a, b) {
 
                 return (
                     new Date(a.reminderDate) -
@@ -1196,7 +1212,7 @@ $(document).ready(function () {
 
 
 
-            if(upcoming.length === 0){
+            if (upcoming.length === 0) {
 
                 $("#upcomingList").html(
                     "<p>No Upcoming Next Month</p>"
@@ -1208,7 +1224,7 @@ $(document).ready(function () {
 
 
 
-            upcoming.forEach(function(item){
+            upcoming.forEach(function(item) {
 
                 $("#upcomingList").append(`
 
@@ -1216,13 +1232,11 @@ $(document).ready(function () {
 
                         <i class="bi bi-calendar-event-fill"></i>
 
-
                         <div class="upcoming-content">
 
                             <h6>
                                 ${item.reminder}
                             </h6>
-
 
                             <small>
                                 ${item.reminderDate}
@@ -1248,6 +1262,10 @@ $(document).ready(function () {
 
         loadUpcoming();
 
+    })
+    .fail(function() {
+
+        console.error("Failed to load API data.");
 
     });
 
